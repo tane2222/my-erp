@@ -1,148 +1,56 @@
 :root {
-    --bg-color: #d47a81; /* 桜色 */
-    --text-color: #ffffff;
-    --dock-bg: rgba(255, 255, 255, 0.2);
+    /* 和の色シリーズでトーンを統一 */
+    --color-life: #d47a81; /* 桜色 */
+    --color-work: #7a98d4; /* 薄藍 */
+    --color-other: #8ab47a; /* 萌黄 */
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    background-color: var(--bg-color);
-    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
-    color: var(--text-color);
-    display: flex;
-    justify-content: center;
-    height: 100vh;
-    overflow: hidden;
+    margin: 0; padding: 0;
+    transition: background-color 0.5s ease; /* 色が変わる時のアニメーション */
+    font-family: -apple-system, sans-serif;
+    color: white;
+    display: flex; justify-content: center; height: 100vh; overflow: hidden;
 }
 
-.iphone-container {
-    width: 100%;
-    max-width: 400px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    padding-top: 50px;
-}
+/* モード別の背景色 */
+body.mode-life { background-color: var(--color-life); }
+body.mode-work { background-color: var(--color-work); }
+body.mode-other { background-color: var(--color-other); }
 
-/* ウィジェット */
-.widget-section {
-    margin-bottom: 30px;
-    text-align: center;
-}
+.iphone-container { width: 100%; max-width: 400px; display: flex; flex-direction: column; align-items: center; padding-top: 40px; }
 
-.circle-group {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 15px;
-}
-
-.circle-day, .circle-num {
-    width: 65px;
-    height: 65px;
+/* 3つのサークル */
+.mode-header { display: flex; gap: 15px; margin-bottom: 30px; }
+.mode-circle {
+    width: 75px; height: 75px;
     background: rgba(255, 255, 255, 0.15);
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: bold; cursor: pointer;
+    transition: all 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.date-text { font-size: 1rem; letter-spacing: 2px; margin-top: 10px; opacity: 0.9; }
-.weather-row { display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 0.75rem; margin-top: 5px; }
-.battery { font-size: 0.65rem; margin-top: 15px; opacity: 0.7; }
-.widgy { font-size: 0.5rem; opacity: 0.5; margin-top: -5px; }
-
-/* アプリグリッド：4列構成 */
-.app-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4列 */
-    column-gap: 15px;
-    row-gap: 25px;
-    width: 90%;
-    margin-top: 10px;
+/* 選択中のサークルを白く光らせる */
+body.mode-life #btn-life, body.mode-work #btn-work, body.mode-other #btn-other {
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
 }
 
-.app-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
+/* メニューグリッド */
+.app-grid { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: 15px; row-gap: 25px; width: 90%; margin-top: 20px; }
+.app-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
 .icon-box {
-    width: 50px;
-    height: 50px;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 6px;
+    width: 50px; height: 50px;
+    background: transparent; border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 6px;
 }
+.app-item span { font-size: 0.6rem; opacity: 0.9; }
 
-.icon-box i { width: 22px; height: 22px; color: white; opacity: 0.9; }
-.app-item span { font-size: 0.6rem; opacity: 0.9; text-align: center; white-space: nowrap; }
-
-/* 検索バー */
-.search-pill {
-    position: absolute;
-    bottom: 210px; /* ドックの少し上 */
-    background: rgba(255, 255, 255, 0.2);
-    padding: 3px 12px;
-    border-radius: 15px;
-    font-size: 0.65rem;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-/* style-home.css の下部（.dock-container以降）を以下に差し替え */
-
-/* ナビゲーションドック（共通デザイン） */
-.dock-container {
-    position: fixed; /* absoluteから固定表示に変更 */
-    bottom: 30px;
-    width: 90%;
-    max-width: 360px;
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border-radius: 25px;
-    padding: 12px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 100;
-}
-
-.dock-item {
-    background: none;
-    border: none;
-    padding: 10px;
-    color: white;
-    font-size: 0.6rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    width: auto;
-    cursor: pointer;
-}
-
-.dock-item i { width: 22px; height: 22px; }
-
-/* Homeがアクティブな状態 */
-.dock-item.active {
-    opacity: 1;
-    font-weight: bold;
-}
-
-/* 他のアイテムは少し透過させる */
-.dock-item:not(.active) {
-    opacity: 0.5;
-}
+/* 以下、ドックや検索バーは以前のstyleを継承 */
+.search-pill { position: absolute; bottom: 210px; background: rgba(255, 255, 255, 0.2); padding: 4px 15px; border-radius: 20px; font-size: 0.7rem; }
+.dock-container { position: fixed; bottom: 30px; width: 90%; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(15px); border-radius: 25px; padding: 12px; display: flex; justify-content: space-around; }
+.dock-item { background: none; border: none; color: white; display: flex; flex-direction: column; align-items: center; font-size: 0.6rem; opacity: 0.5; }
+.dock-item.active { opacity: 1; }
+.dock-item i { width: 22px; height: 22px; margin-bottom: 4px; }
