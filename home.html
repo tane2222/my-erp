@@ -65,15 +65,19 @@
             <i data-lucide="search" style="width:12px;"></i> 検索
         </div>
 
-        <footer class="dock-container">
-            <div class="dock">
-                <div class="dock-item"><i data-lucide="message-circle"></i></div>
-                <div class="dock-item"><i data-lucide="hash"></i></div>
-                <div class="dock-item"><i data-lucide="flame"></i></div>
-                <div class="dock-item"><i data-lucide="clapperboard"></i></div>
-            </div>
-        </footer>
+       <div class="dock-container">
+            <button class="dock-item active">
+                <i data-lucide="home"></i><span>Home</span>
+            </button>
+            <button class="dock-item" onclick="navigate('index.html')">
+                <i data-lucide="wallet"></i><span>Spending</span>
+            </button>
+            <button class="dock-item" onclick="navigate('passwords.html')">
+                <i data-lucide="key-round"></i><span>Passwords</span>
+            </button>
+        </div>
     </div>
+    
 
     <script>
         lucide.createIcons();
