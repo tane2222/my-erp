@@ -1,8 +1,30 @@
 window.onload = async function() {
-    const configRes = await fetch("/api/config");
-    const config = await configRes.json();
-    await liff.init({ liffId: config.liffId });
-    // (以前実装した本人確認処理をここにも入れる)
+    try {
+        // 1. 環境変数からIDを取得（ここが抜けていると400エラーになりやすい）
+        const configRes = await fetch("/api/config");
+        const config = await configRes.json();
+
+        // 2. LIFF初期化
+        await liff.init({ liffId: config.liffId });
+
+        if (!liff.isLoggedIn()) {
+            liff.login();
+            return;
+        }
+
+        // 3. 本人確認（OWNER_IDチェック）
+        const profile = liff.getContext();
+        const authRes = await fetch(`/api/config?userId=${profile.userId}`);
+        const auth = await authRes.json();
+
+        if (!auth.isOwner) {
+            document.body.innerHTML = "<h1>閲覧権限がありません</h1>";
+            return;
+        }
+        console.log("認証成功");
+    } catch (e) {
+        console.error("LIFF Init Error:", e);
+    }
 };
 
 // 保存処理：暗号化してから送信
