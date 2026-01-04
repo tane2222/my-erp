@@ -1,3 +1,5 @@
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwVAuGEBmtwMyWtDDhnwGJG-Pno9kcPyybycGiXPJNp-AO6KtjxvfQVjkOjYgWkK0E2/exec"
+
 // LIFFの初期化（LIFF IDが必要な場合は後で追加）
 window.onload = function() {
     liff.init({ liffId: "2008812966-5qG4iaar" })
