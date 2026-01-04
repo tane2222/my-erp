@@ -1,5 +1,5 @@
 // メモしたGASのURLをここに貼り付けてください
-const GAS_URL = "https://script.google.com/macros/library/d/15fE4FW9mDMUVq3SKhECJ0nbA19ohkywo4AF1_8_hkvVxZdgPxEhWwRas/3";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwVAuGEBmtwMyWtDDhnwGJG-Pno9kcPyybycGiXPJNp-AO6KtjxvfQVjkOjYgWkK0E2/exec";
 
 // LIFFの初期化（LIFF IDが必要な場合は後で追加）
 window.onload = function() {
