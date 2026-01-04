@@ -2,6 +2,7 @@ export default async function handler(req, res) {
   // Vercelに設定した環境変数を読み込む（ブラウザからは見えません）
   const GAS_URL = process.env.GAS_URL;
   const API_KEY = process.env.GAS_API_KEY;
+  const OWNER_ID = process.env.OWNER_ID;
 
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
