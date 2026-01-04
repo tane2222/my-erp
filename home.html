@@ -31,10 +31,16 @@
         <div class="search-pill"><i data-lucide="search" style="width:12px;"></i> 検索</div>
 
         <div class="dock-container">
-            <button class="dock-item active"><i data-lucide="home"></i><span>Home</span></button>
-            <button class="dock-item" onclick="navigate('index.html')"><i data-lucide="wallet"></i><span>Spending</span></button>
-            <button class="dock-item" onclick="navigate('passwords.html')"><i data-lucide="key-round"></i><span>Passwords</span></button>
-        </div>
+    <button class="dock-item" onclick="location.href='home.html'">
+        <i data-lucide="home"></i><span>Home</span>
+    </button>
+    <button class="dock-item" onclick="location.href='memo.html'">
+        <i data-lucide="sticky-note"></i><span>Memo</span>
+    </button>
+    <button class="dock-item" onclick="location.href='passwords.html'">
+        <i data-lucide="key-round"></i><span>Passwords</span>
+    </button>
+</div>
     </div>
 
     <script src="script-home.js"></script>
