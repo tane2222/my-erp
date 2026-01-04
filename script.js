@@ -1,4 +1,3 @@
-
 // LIFFの初期化（LIFF IDが必要な場合は後で追加）
 window.onload = function() {
     liff.init({ liffId: "2008812966-5qG4iaar" })
@@ -23,6 +22,7 @@ async function sendData() {
             method: "POST",
             body: JSON.stringify({
                 action: "addExpense",
+                apiKey: "your-very-secret-key-123", // GASと同じ合言葉を送る
                 date: new Date().toLocaleDateString(),
                 amount: amount,
                 category: category,
