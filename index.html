@@ -3,46 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>個人用ERP - 家計簿</title>
+    <title>支出管理 - Sakura</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
     <div id="app">
-        <h1>💰 家計簿入力</h1>
+        <h1>SPENDING</h1>
         
-        <div class="form-group">
-            <label>金額</label>
-            <input type="number" id="amount" placeholder="0" inputmode="numeric">
+        <div class="glass-card">
+            <div class="form-group">
+                <label>AMOUNT</label>
+                <input type="number" id="amount" placeholder="0" inputmode="numeric">
+            </div>
+            <div class="form-group">
+                <label>CATEGORY</label>
+                <select id="category">
+                    <option>食費</option><option>日用品</option><option>娯楽</option><option>自己研鑽</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>PAYMENT</label>
+                <select id="method">
+                    <option>クレジットカードA</option><option>Amazon Pay</option><option>現金</option>
+                </select>
+            </div>
+            <button onclick="sendData()" id="submit-btn">SAVE</button>
         </div>
 
-        <div class="form-group">
-            <label>カテゴリ</label>
-            <select id="category">
-                <option>食費</option>
-                <option>日用品</option>
-                <option>娯楽</option>
-                <option>自己研鑽</option>
-            </select>
+        <div class="dock-container">
+            <button class="dock-item" onclick="location.href='home.html'">
+                <i data-lucide="home"></i><span>Home</span>
+            </button>
+            <button class="dock-item active">
+                <i data-lucide="wallet"></i><span>Spending</span>
+            </button>
+            <button class="dock-item" onclick="location.href='passwords.html'">
+                <i data-lucide="key-round"></i><span>Passwords</span>
+            </button>
         </div>
-
-        <div class="form-group">
-            <label>支払方法</label>
-            <select id="method">
-                <option>クレジットカードA</option>
-                <option>Amazon Pay</option>
-                <option>現金</option>
-            </select>
-        </div>
-
-        <button onclick="sendData()" id="submit-btn">保存する</button>
-
-        <nav class="footer-nav">
-            <button class="active">家計簿</button>
-            <button disabled>🔐（近日）</button>
-            <button disabled>💡（近日）</button>
-        </nav>
     </div>
     <script src="script.js"></script>
+    <script>lucide.createIcons();</script>
 </body>
 </html>
