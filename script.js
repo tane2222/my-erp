@@ -1,5 +1,3 @@
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwVAuGEBmtwMyWtDDhnwGJG-Pno9kcPyybycGiXPJNp-AO6KtjxvfQVjkOjYgWkK0E2/exec"
-
 // あなたのLINEユーザーID（LINE Developersの「自分の利用者の識別子」などで確認できます）
 const OWNER_ID = "U7c1dce9de17d79f1bab98b9ad1604722"; 
 
@@ -20,6 +18,8 @@ window.onload = function() {
         });
 };
 
+// 【重要】GAS_URLやapiKeyの記述はすべて削除します！
+
 async function sendData() {
     const amount = document.getElementById('amount').value;
     const category = document.getElementById('category').value;
@@ -32,11 +32,11 @@ async function sendData() {
     btn.disabled = true;
 
     try {
-        await fetch(GAS_URL, {
+        // GAS_URLではなく、自分のサイト内の "/api/save" を叩く
+        const response = await fetch("/api/save", {
             method: "POST",
             body: JSON.stringify({
                 action: "addExpense",
-                apiKey: "h7Yk9Lq2xR8pVz6Tn3bJq1Xw4mQf5Ue9", // GASの環境変数に設定した任意のキー
                 date: new Date().toLocaleDateString(),
                 amount: amount,
                 category: category,
@@ -44,12 +44,21 @@ async function sendData() {
                 memo: ""
             })
         });
-        alert("保存しました！");
-        document.getElementById('amount').value = "";
+
+        const result = await response.json();
+        if (result.status === "success") {
+            alert("保存しました！");
+            document.getElementById('amount').value = "";
+        } else {
+            throw new Error(result.message);
+        }
     } catch (e) {
-        alert("エラーが発生しました");
+        console.error(e);
+        alert("エラーが発生しました: " + e.message);
     } finally {
         btn.innerText = "保存する";
         btn.disabled = false;
     }
 }
+
+
