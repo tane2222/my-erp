@@ -49,7 +49,7 @@ body.mode-life #btn-life, body.mode-work #btn-work, body.mode-other #btn-other {
 .app-item span { font-size: 0.6rem; opacity: 0.9; }
 
 /* 以下、ドックや検索バーは以前のstyleを継承 */
-.search-pill { position: absolute; bottom: 210px; background: rgba(255, 255, 255, 0.2); padding: 4px 15px; border-radius: 20px; font-size: 0.7rem; }
+.search-pill { position: absolute; bottom: 140px; background: rgba(255, 255, 255, 0.2); padding: 4px 15px; border-radius: 20px; font-size: 0.7rem; }
 .dock-container { position: fixed; bottom: 30px; width: 90%; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(15px); border-radius: 25px; padding: 12px; display: flex; justify-content: space-around; }
 .dock-item { background: none; border: none; color: white; display: flex; flex-direction: column; align-items: center; font-size: 0.6rem; opacity: 0.5; }
 .dock-item.active { opacity: 1; }
