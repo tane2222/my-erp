@@ -6,21 +6,23 @@
     <title>Personal ERP Home</title>
     <link rel="stylesheet" href="style-home.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
     <div class="iphone-container">
         <header class="widget-section">
-            <div class="date-circles">
-                <div class="circle-day">SUN</div>
-                <div class="circle-num">4</div>
-            </div>
-            <div class="weather-info">
-                <p class="year-month">2026 JAN</p>
+            <div class="date-widget">
+                <div class="circle-group">
+                    <div class="circle-day">WED</div>
+                    <div class="circle-num">27</div>
+                </div>
+                <div class="date-text">2026 DEC</div>
                 <div class="weather-row">
                     <i data-lucide="cloud-sun"></i>
-                    <span>TOKYO 10°C</span>
+                    <span>東京都 11°C</span>
                 </div>
                 <p class="battery">BATTERIE @ 80%</p>
+                <p class="widgy">widgy</p>
             </div>
         </header>
 
@@ -41,7 +43,23 @@
                 <div class="icon-box"><i data-lucide="calendar"></i></div>
                 <span>予定</span>
             </div>
-            </main>
+            <div class="app-item">
+                <div class="icon-box"><i data-lucide="shopping-cart"></i></div>
+                <span>買い物</span>
+            </div>
+            <div class="app-item">
+                <div class="icon-box"><i data-lucide="music"></i></div>
+                <span>音楽</span>
+            </div>
+            <div class="app-item">
+                <div class="icon-box"><i data-lucide="camera"></i></div>
+                <span>写真</span>
+            </div>
+            <div class="app-item">
+                <div class="icon-box"><i data-lucide="settings"></i></div>
+                <span>設定</span>
+            </div>
+        </main>
 
         <div class="search-pill">
             <i data-lucide="search" style="width:12px;"></i> 検索
@@ -50,21 +68,30 @@
         <footer class="dock-container">
             <div class="dock">
                 <div class="dock-item"><i data-lucide="message-circle"></i></div>
-                <div class="dock-item"><i data-lucide="camera"></i></div>
-                <div class="dock-item"><i data-lucide="heart"></i></div>
+                <div class="dock-item"><i data-lucide="hash"></i></div>
+                <div class="dock-item"><i data-lucide="flame"></i></div>
                 <div class="dock-item"><i data-lucide="clapperboard"></i></div>
             </div>
         </footer>
     </div>
 
     <script>
-        // アイコンをレンダリング
         lucide.createIcons();
+
         function navigate(page) {
-    // 現在のURLのディレクトリ部分を取得して結合する
-    const currentUrl = window.location.origin;
-    window.location.href = `${currentUrl}/${page}`;
-}
+            const currentUrl = window.location.origin;
+            window.location.href = `${currentUrl}/${page}`;
+        }
+
+        // 初期化処理（以前のOWNER_IDチェックなどをここに含める）
+        window.onload = async function() {
+            try {
+                const configRes = await fetch("/api/config");
+                const config = await configRes.json();
+                await liff.init({ liffId: config.liffId });
+                // ... 本人確認ロジック
+            } catch (e) { console.error(e); }
+        };
     </script>
 </body>
 </html>
