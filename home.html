@@ -8,94 +8,35 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
-<body>
-    <div class="iphone-container">
-        <header class="widget-section">
-            <div class="date-widget">
-                <div class="circle-group">
-                    <div class="circle-day">WED</div>
-                    <div class="circle-num">27</div>
-                </div>
-                <div class="date-text">2026 DEC</div>
-                <div class="weather-row">
-                    <i data-lucide="cloud-sun"></i>
-                    <span>東京都 11°C</span>
-                </div>
-                <p class="battery">BATTERIE @ 80%</p>
-                <p class="widgy">widgy</p>
-            </div>
+<body class="mode-life"> <div class="iphone-container">
+        
+        <header class="mode-header">
+            <div class="mode-circle" onclick="switchMode('work')" id="btn-work">WORK</div>
+            <div class="mode-circle" onclick="switchMode('life')" id="btn-life">LIFE</div>
+            <div class="mode-circle" onclick="switchMode('other')" id="btn-other">OTHER</div>
         </header>
 
-        <main class="app-grid">
-            <div class="app-item" onclick="navigate('index.html')">
-                <div class="icon-box"><i data-lucide="wallet"></i></div>
-                <span>家計簿</span>
+        <div class="widget-section">
+            <div class="date-text" id="current-year-month">2026 JAN</div>
+            <div class="weather-row">
+                <i data-lucide="cloud-sun"></i>
+                <span id="weather-city">TOKYO 10°C</span>
             </div>
-            <div class="app-item" onclick="navigate('passwords.html')">
-                <div class="icon-box"><i data-lucide="key-round"></i></div>
-                <span>パスワード</span>
-            </div>
-            <div class="app-item">
-                <div class="icon-box"><i data-lucide="lightbulb"></i></div>
-                <span>アイデア</span>
-            </div>
-            <div class="app-item">
-                <div class="icon-box"><i data-lucide="calendar"></i></div>
-                <span>予定</span>
-            </div>
-            <div class="app-item">
-                <div class="icon-box"><i data-lucide="shopping-cart"></i></div>
-                <span>買い物</span>
-            </div>
-            <div class="app-item">
-                <div class="icon-box"><i data-lucide="music"></i></div>
-                <span>音楽</span>
-            </div>
-            <div class="app-item">
-                <div class="icon-box"><i data-lucide="camera"></i></div>
-                <span>写真</span>
-            </div>
-            <div class="app-item">
-                <div class="icon-box"><i data-lucide="settings"></i></div>
-                <span>設定</span>
-            </div>
-        </main>
-
-        <div class="search-pill">
-            <i data-lucide="search" style="width:12px;"></i> 検索
+            <p class="battery">BATTERIE @ 80%</p>
         </div>
 
-       <div class="dock-container">
-            <button class="dock-item active">
-                <i data-lucide="home"></i><span>Home</span>
-            </button>
-            <button class="dock-item" onclick="navigate('index.html')">
-                <i data-lucide="wallet"></i><span>Spending</span>
-            </button>
-            <button class="dock-item" onclick="navigate('passwords.html')">
-                <i data-lucide="key-round"></i><span>Passwords</span>
-            </button>
+        <main class="app-grid" id="menu-grid">
+            </main>
+
+        <div class="search-pill"><i data-lucide="search" style="width:12px;"></i> 検索</div>
+
+        <div class="dock-container">
+            <button class="dock-item active"><i data-lucide="home"></i><span>Home</span></button>
+            <button class="dock-item" onclick="navigate('index.html')"><i data-lucide="wallet"></i><span>Spending</span></button>
+            <button class="dock-item" onclick="navigate('passwords.html')"><i data-lucide="key-round"></i><span>Passwords</span></button>
         </div>
     </div>
-    
 
-    <script>
-        lucide.createIcons();
-
-        function navigate(page) {
-            const currentUrl = window.location.origin;
-            window.location.href = `${currentUrl}/${page}`;
-        }
-
-        // 初期化処理（以前のOWNER_IDチェックなどをここに含める）
-        window.onload = async function() {
-            try {
-                const configRes = await fetch("/api/config");
-                const config = await configRes.json();
-                await liff.init({ liffId: config.liffId });
-                // ... 本人確認ロジック
-            } catch (e) { console.error(e); }
-        };
-    </script>
+    <script src="script-home.js"></script>
 </body>
 </html>
