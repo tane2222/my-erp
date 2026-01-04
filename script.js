@@ -1,5 +1,5 @@
 // あなたのLINEユーザーID（LINE Developersの「自分の利用者の識別子」などで確認できます）
-const OWNER_ID = "U7c1dce9de17d79f1bab98b9ad1604722"; 
+const OWNER_ID = "/api/save"; 
 
 window.onload = function() {
     liff.init({ liffId: "2008812966-5qG4iaar" })
