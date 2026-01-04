@@ -1,18 +1,21 @@
+let currentLiffId = "";
+
 window.onload = async function() {
     try {
-        // 1. 環境変数からIDを取得（ここが抜けていると400エラーになりやすい）
         const configRes = await fetch("/api/config");
         const config = await configRes.json();
+        currentLiffId = config.liffId;
 
-        // 2. LIFF初期化
-        await liff.init({ liffId: config.liffId });
+        // 400エラー対策：二重初期化を防ぎつつ確実に初期化
+        if (!liff.id) {
+            await liff.init({ liffId: currentLiffId });
+        }
 
         if (!liff.isLoggedIn()) {
-            liff.login();
+            liff.login({ redirectUri: window.location.href });
             return;
         }
 
-        // 3. 本人確認（OWNER_IDチェック）
         const profile = liff.getContext();
         const authRes = await fetch(`/api/config?userId=${profile.userId}`);
         const auth = await authRes.json();
@@ -21,9 +24,8 @@ window.onload = async function() {
             document.body.innerHTML = "<h1>閲覧権限がありません</h1>";
             return;
         }
-        console.log("認証成功");
     } catch (e) {
-        console.error("LIFF Init Error:", e);
+        console.error("Init Error", e);
     }
 };
 
