@@ -25,11 +25,11 @@
         </header>
 
         <main class="app-grid">
-            <div class="app-item" onclick="location.href='index.html'">
+            <div class="app-item" onclick="navigate('index.html')">
                 <div class="icon-box"><i data-lucide="wallet"></i></div>
                 <span>家計簿</span>
             </div>
-            <div class="app-item" onclick="location.href='passwords.html'">
+            <div class="app-item" onclick="navigate('passwords.html')">
                 <div class="icon-box"><i data-lucide="key-round"></i></div>
                 <span>パスワード</span>
             </div>
@@ -60,6 +60,11 @@
     <script>
         // アイコンをレンダリング
         lucide.createIcons();
+        function navigate(page) {
+    // 現在のURLのディレクトリ部分を取得して結合する
+    const currentUrl = window.location.origin;
+    window.location.href = `${currentUrl}/${page}`;
+}
     </script>
 </body>
 </html>
