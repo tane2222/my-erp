@@ -36,7 +36,7 @@ async function sendData() {
             method: "POST",
             body: JSON.stringify({
                 action: "addExpense",
-                apiKey: "your-very-secret-key-123", // GASと同じ合言葉を送る
+                apiKey: "h7Yk9Lq2xR8pVz6Tn3bJq1Xw4mQf5Ue9", // GASの環境変数に設定した任意のキー
                 date: new Date().toLocaleDateString(),
                 amount: amount,
                 category: category,
