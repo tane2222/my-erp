@@ -82,23 +82,19 @@ button {
 
 button:active { background: rgba(255, 255, 255, 0.5); }
 
-
-/* style-home.css の下部（.dock-container以降）を以下に差し替え */
-
-/* ナビゲーションドック（共通デザイン） */
+/* 下部ドック（ナビゲーション） */
 .dock-container {
-    position: fixed; /* absoluteから固定表示に変更 */
+    position: fixed;
     bottom: 30px;
     width: 90%;
     max-width: 360px;
-    background: rgba(255, 255, 255, 0.25);
+    background: var(--dock-bg);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border-radius: 25px;
     padding: 12px;
     display: flex;
     justify-content: space-around;
-    align-items: center;
     z-index: 100;
 }
 
@@ -113,18 +109,8 @@ button:active { background: rgba(255, 255, 255, 0.5); }
     align-items: center;
     gap: 4px;
     width: auto;
-    cursor: pointer;
 }
 
 .dock-item i { width: 22px; height: 22px; }
-
-/* Homeがアクティブな状態 */
-.dock-item.active {
-    opacity: 1;
-    font-weight: bold;
-}
-
-/* 他のアイテムは少し透過させる */
-.dock-item:not(.active) {
-    opacity: 0.5;
-}
+.dock-item.active { opacity: 1; font-weight: bold; }
+.dock-item:not(.active) { opacity: 0.5; }
