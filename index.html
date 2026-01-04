@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>マダココ LIFF App</title>
+    <link rel="stylesheet" href="swiper-bundle.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+</head>
+<body>
+    <div id="loader-wrapper">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <div class="loader-text-container">
+                <span class="loading-text-item">リダイレクト中です...</span>
+                <span class="loading-text-item">読み込み中です...</span>
+                <span class="loading-text-item">表示情報の取得です</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="app" style="display: none;">
+    <!-------------- ---------------------------------------- -->
+    <!-------------- マイページ（ホーム）ここからです-------------- -->
+    <!-------------- ---------------------------------------- -->
+        <div id="my-page" class="page" style="display: none;">
+            <button id="menu-toggle-btn" class="menu-icon-btn" onclick="toggleSideMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <header class="profile-header">
+                <div class="profile-image-container">
+                <img id="profile-image" src="https://placehold.jp/150x150.png" alt="プロフィール画像">
+                </div>
+                <h2 id="nickname">読み込み中...</h2>
+                <p id="user-details">--歳・--領域</p>
+            </header>
+            
+            <main class="main-content">
+                <section class="metrics">
+                    <div class="metric-card" onclick="openKyunDetailModal()">
+                        <span class="metric-label">保有キュン</span>
+                        <span class="metric-value" id="kyun-points">--</span>
+                    </div>
+                    <div class="metric-card" onclick="openDiagnosisModal()">
+                        <span class="metric-label">診断達成率</span>
+                        <span class="metric-value" id="diagnosis-progress">--%</span>
+                    </div>
+                </section>
+                
+             <div id="kyun-detail-modal" class="modal-overlay">
+            <div class="modal-content-box">
+                <div class="modal-header">
+                    <h3>キュンポイント詳細</h3>
+                    <button class="modal-close-btn" onclick="closeKyunDetailModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="point-summary">
+                        <span class="label">現在の保有数</span>
+                        <span class="value" id="modal-kyun-total">--</span>
+                        <span class="unit">キュン</span>
+                    </div>
+
+                    <div class="point-details-list">
+                        <div class="detail-item">
+                            <span class="detail-label">有効期限 (無期限)</span>
+                            <span class="detail-value">10pt</span>
+                        </div>
+                        <div class="detail-item alert">
+                            <span class="detail-label">今月末で失効</span>
+                            <span class="detail-value">5pt</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">来月末で失効</span>
+                            <span class="detail-value">0pt</span>
+                        </div>
+                    </div>
+
+                    <hr class="divider">
+                    
+                    <p class="modal-note">
+                        <small>※ポイントは付与された日から180日間有効です。<br>期限が切れると自動的に失効します。</small>
+                    </p>
+
+                    <button class="modal-action-btn" onclick="closeKyunDetailModal()">閉じる</button>
+                </div>
+            </div>
+          </div>
+
+                <section class="pickup-section">
+                    <h3>今日のピックアップ</h3>
+                </section>
+                <section id="photo-upload-promo" class="photo-upload-promo" style="display: none;">
+                    <div class="promo-card">
+                        <div class="promo-icon">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <div class="promo-content">
+                            <h3>プロフィール画像を設定しよう</h3>
+                            <p>顔写真があるとマッチング率が大幅UP！<br>ぜひ登録しましょう！</p>
+                        </div>
+                        <button class="promo-btn" onclick="alert('写真登録機能')">
+                            写真を登録する <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </section>
+                
+                <section class="pickup-users">
+                    <img src="https://placehold.jp/100x100.png?text=User1" alt="ピックアップユーザー1">
+                    <img src="https://placehold.jp/100x100.png?text=User2" alt="ピックアップユーザー2">
+                    <img src="https://placehold.jp/100x100.png?text=User3" alt="ピックアップユーザー3">
+                </section>
+
+                <section class="timeline">
+                    <div class="timeline-item">
+                        <img src="https://placehold.jp/100x100.png?text=User4" alt="ゆりん">
+                        <p><strong>ゆりさん(24)</strong>とマッチングしました！</p>
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <div class="timeline-item">
+                        <img src="https://placehold.jp/100x100.png?text=User5" alt="さおり">
+                        <p><strong>さおりさん(24)</strong>が「いいね！」しました。</p>
+                        <i class="fas fa-heart" style="color: #FFC0CB;"></i>
+                    </div>
+                    <div class="timeline-item timeline-item-action">
+                        <img src="https://placehold.jp/100x100.png?text=User6" alt="いれん">
+                        <div class="timeline-item-content">
+                            <p><strong>いれんさん</strong>が「いいね！」しました。</p>
+                            <p class="timeline-subtext">プロフィールを30%更新しました！</p>
+                        </div>
+                        <a href="#" class="timeline-button">可能する</a>
+                    </div>
+                </section>
+
+                </main>
+             <!-------------- ホーム画面のフッターです-------------------- -->
+            <nav class="footer-nav">
+                <a href="#" class="nav-item active" id="go-to-home-from-home">
+                    <i class="fas fa-home"></i>
+                    <span>ホーム</span>
+                </a>
+                <a href="#" class="nav-item" id="go-to-diagnosis-from-home">
+                    <i class="fas fa-search"></i>
+                    <span>診断</span>
+                </a>
+                <div class="nav-center-wrapper">
+                    <a href="#" class="nav-item-center" id="go-to-swipe-from-home">
+                        <img src="img/logo.png" alt="さがす" class="footer-logo">
+                    </a>
+                    <span class="nav-center-label">さがす</span>
+                </div>
+                <a href="#" class="nav-item" id="go-to-messages-from-home">
+                    <i class="fas fa-comments"></i>
+                    <span>メッセージ</span>
+                </a>
+                <a href="#" class="nav-item" id="go-to-assistant-from-home">
+                    <i class="fas fa-user"></i>
+                    <span>アシスタント</span>
+                </a>
+            </nav>
+             <!-------------- ホーム画面のフッターここまで-------------------- -->
+        
+        </div><!----my-page閉じタグ- -->
+    <!-------------- ---------------------------------------- -->
+    <!-------------- マイページ（ホーム）ここまで----------------- -->
+    <!-------------- ---------------------------------------- -->
+    
+        <!-------------- ---------------------------------------- -->
+        <!-------------- グリッド・スワイプユーザー画面ここからです-------------- -->
+        <div id="search-page" class="page" style="display: none;">
+        <div class="app-container">
+            
+            <header class="app-header">
+                <button class="icon-btn back-button" data-target="my-page">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+
+                <div class="header-center-action">
+                    <button class="view-toggle-btn active" id="toggle-view-mode-btn">
+                        <i class="fas fa-th-large" id="toggle-view-icon"></i>
+                    </button>
+                </div>
+
+                <button class="icon-btn menu-btn" onclick="toggleSideMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </header>
+
+            <main class="main-content" style="position: relative;">
+                
+                <div id="swipe-view-area" style="width: 100%; height: 100%;">
+                    <div class="swiper">
+                        <div class="swiper-wrapper" id="swipe-deck">
+                            </div>
+                    </div>
+                </div>
+
+                <div id="grid-view-area" class="user-grid" style="display: none; width: 100%; height: 100%;">
+                    <div id="user-grid-container">
+                        </div>
+                </div>
+
+            </main>
+
+            <nav class="footer-nav">
+                <a href="#" class="nav-item" id="go-to-home-from-search">
+                    <i class="fas fa-home"></i>
+                    <span>ホーム</span>
+                </a>
+                <a href="#" class="nav-item" id="go-to-diagnosis-from-search">
+                    <i class="fas fa-search"></i>
+                    <span>診断</span>
+                </a>
+                <div class="nav-center-wrapper">
+                    <a href="#" class="nav-item-center active" id="go-to-search-refresh">
+                        <img src="img/logo.png" alt="さがす" class="footer-logo">
+                    </a>
+                    <span class="nav-center-label active">さがす</span>
+                </div>
+                <a href="#" class="nav-item" id="go-to-messages-from-search">
+                    <i class="fas fa-comments"></i>
+                    <span>メッセージ</span>
+                </a>
+                <a href="#" class="nav-item" id="go-to-assistant-from-search">
+                    <i class="fas fa-user"></i>
+                    <span>アシスタント</span>
+                </a>
+            </nav>
+        </div>
+      </div>
+        <!-------------- グリッド・スワイプユーザー画面ここまで---------------- -->
+        <!-------------- ---------------------------------------- -->
+        
+    <!-------------- ---------------------------------------- -->
+    <!-------------- 初回登録画面ここからです-------------------- -->
+    <!-------------- ---------------------------------------- -->
+    <div id="registration-header" style="display: none;">
+            
+            <div class="header-top-row">
+                <button id="reg-back-btn" class="header-back-btn" onclick="goBackStep()">
+                    <i class="fas fa-chevron-left"></i>
+                    <span>戻る</span>
+                </button>
+
+                <div class="reg-logo-container">
+                    <img src="img/logo.png" alt="MADAKOKO Logo" class="reg-logo">
+                </div>
+                
+                <div class="header-spacer"></div>
+            </div>
+            
+            <div class="progress-area">
+                <div class="progress-label">
+                    <span class="step-text">STEP</span>
+                    <span id="current-step-num" class="current-num">1</span>
+                    <span class="total-num">/ 6</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div id="progress-bar-fill" class="progress-bar-fill" style="width: 16%;"></div>
+                </div>
+            </div>
+        </div>
+
+    <div id="gender-selection-page" class="page" style="display: none;">
+            <div class="gender-container">
+                <h2>あなたの性別を教えてください</h2>
+                <p>マッチングのために必要です</p>
+                <div class="gender-buttons">
+                    <button class="gender-btn male" onclick="selectGender('Men')">
+                        <i class="fas fa-mars"></i> 男性
+                    </button>
+                    <button class="gender-btn female" onclick="selectGender('Women')">
+                        <i class="fas fa-venus"></i> 女性
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    <div id="name-input-page" class="page" style="display: none;">
+            <div class="gender-container"> <h2>お名前を教えてください</h2>
+                <p>ユーザー登録のため、お名前（フルネーム）を入力してください。<br><small>(例)田中花子</small></p>
+                
+                <div class="input-group">
+                    <input type="text" id="user-name-input" class="registration-input" placeholder="お名前を入力">
+                </div>
+
+                <div class="gender-buttons" style="margin-top: 30px;">
+                    <button class="gender-btn next-step" onclick="submitName()">
+                        次へ進む <i class="fas fa-chevron-right" style="font-size: 1rem; margin-left: 5px;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+     <div id="nickname-input-page" class="page" style="display: none;">
+            <div class="gender-container"> <h2>ニックネーム登録</h2>
+                <p>次に、マダココ上で使用したいニックネームを送信をお願い致します！<br><small style="color: #ff5252;">※他のユーザーに表示されます</small></p>
+                
+                <div class="input-group">
+                    <input type="text" id="user-nickname-input" class="registration-input" placeholder="ニックネームを入力">
+                </div>
+
+                <div class="gender-buttons" style="margin-top: 30px;">
+                    <button class="gender-btn next-step" onclick="submitNickname()">
+                        次へ進む <i class="fas fa-chevron-right" style="font-size: 1rem; margin-left: 5px;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+     <div id="employee-id-input-page" class="page" style="display: none;">
+            <div class="gender-container"><h2>従業員番号の登録</h2>
+                <p>次に、従業員番号の送信をお願い致します！<br>
+                   <small>(例)01010011 ※半角英数字のみ入力して下さい。</small>
+                </p>
+                
+                <div class="input-group">
+                    <input type="tel" id="user-employee-id-input" class="registration-input" placeholder="従業員番号を入力" maxlength="8" pattern="[0-9]*">
+                </div>
+
+                <div class="gender-buttons" style="margin-top: 30px;">
+                    <button class="gender-btn next-step" onclick="submitEmployeeId()">
+                        次へ進む <i class="fas fa-chevron-right" style="font-size: 1rem; margin-left: 5px;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+      <div id="age-input-page" class="page" style="display: none;">
+            <div class="gender-container">
+                <h2>年齢の登録</h2>
+                <p>次に、あなたの年齢の送信をお願い致します！</p>
+                
+                <div class="input-group">
+                    <input type="tel" id="user-age-input" class="registration-input" placeholder="年齢を入力 (例: 25)" maxlength="2" pattern="[0-9]*">
+                </div>
+
+                <div class="gender-buttons" style="margin-top: 30px;">
+                    <button class="gender-btn next-step" onclick="submitAge()">
+                        次へ進む <i class="fas fa-chevron-right" style="font-size: 1rem; margin-left: 5px;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+      <div id="department-input-page" class="page" style="display: none;">
+            <div class="gender-container" style="max-width: 400px;"> <h2>所属領域の選択</h2>
+                <p>あなたが所属する領域を選択してください！</p>
+                
+                <div class="department-grid">
+                    <button class="dept-btn" onclick="submitDepartment('HR/人材')">HR・人材</button>
+                    <button class="dept-btn" onclick="submitDepartment('住まい')">住まい</button>
+                    <button class="dept-btn" onclick="submitDepartment('結婚')">結婚</button>
+                    <button class="dept-btn" onclick="submitDepartment('車')">車</button>
+                    <button class="dept-btn" onclick="submitDepartment('教育/進路')">教育・進路</button>
+                    <button class="dept-btn" onclick="submitDepartment('旅行・レジャー')">旅行・レジャー</button>
+                    <button class="dept-btn" onclick="submitDepartment('飲食')">飲食</button>
+                    <button class="dept-btn" onclick="submitDepartment('ビューティー')">ビューティー</button>
+                    <button class="dept-btn" onclick="submitDepartment('その他（業務支援など）')">その他<br><span style="font-size:0.8em">(業務支援など)</span></button>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <small>※ボタンをタップすると登録が完了します</small>
+                </div>
+            </div>
+        </div>
+        <!-------------- ---------------------------------------- -->
+        <!-------------- 　初回登録画面ここまで　-------------------- -->
+        <!-------------- ---------------------------------------- -->
+        
+
+        <!-- 登録後のオンボーディング-->
+        <div id="onboarding-page" class="page" style="display: none;">
+　　　　　<div class="swiper onboarding-swiper">
+                <div class="swiper-wrapper">
+                    
+                    <div class="swiper-slide onboarding-slide">
+                        <div class="slide-text-area">
+                            <h2>ご登録ありがとうございます！<br>まずは使い方を知りましょう</h2>
+                        </div>
+                        <img src="img/AI-choice.png" alt="説明画像1" class="onboarding-image">
+                        <div class="slide-text-area">
+                            <p>あなたを助ける専属の<br>AIアシスタントを選択します。</p>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide onboarding-slide">
+                       <div class="slide-text-area">
+                            <h2>プロフィール写真を登録しましょう</h2>
+                            <p>身バレ防止のため、個人を特定できない写真がベストです。<br>後からマイページで変更できます。</p>
+                        </div>
+                        <!-- <img src="https://placehold.jp/800x600.png?text=Image+3" alt="説明画像2" class="onboarding-image">-->
+                        <img src="https://tanes.jp/wp-content/uploads/2025/11/ex_profile.png" alt="説明画像2" class="onboarding-image">
+                        <div class="slide-text-area">
+                            <div class="photo-tips">
+                                <small>好きなものの写真などが良いかも！<br>※他人の写真など、プライバシーを侵害する写真はやめて下さい。</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-slide onboarding-slide">
+                      <div class="slide-text-area">
+                            <h2>６つの診断であなたの個性を登録</h2>
+                        </div>
+                        <img src="https://tanes.jp/wp-content/uploads/2025/05/1.png" alt="説明画像3" class="onboarding-image">
+                        <div class="slide-text-area">
+                            <p>楽しい診断であなたの価値観を表現！<br>それをもとにマッチング！</p>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide onboarding-slide">
+                      <div class="slide-text-area">
+                            <h2>「キュン」でアピールしよう！</h2>
+                        </div>
+                        <!--  <img src="https://placehold.jp/800x600.png?text=Image+2" alt="説明画像4" class="onboarding-image">-->
+                         <img src="https://tanes.jp/wp-content/uploads/2025/11/kyun-image.png" alt="説明画像4" class="onboarding-image">
+                        <div class="slide-text-area">
+                            <p>「キュン」で気になる相手へアピール！<br>お互いに送り合った場合、<br>「キュン・キュン」状態突入！<br>トークができるようになるよ！</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="swiper-pagination onboarding-pagination">
+                </div>
+                <div class="onboarding-footer">
+                <button id="onboarding-next-btn" class="main-action-btn">次へ</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="assistant-selection-page" class="page" style="display: none;">
+            <div class="gender-container" style="max-width: 500px;">
+                <h2>パートナーの選択</h2>
+                <p>あなたの診断をサポートする<br>アシスタントを選択してください。</p>
+
+                <div class="assistant-grid">
+                    <div class="assistant-card" onclick="submitAssistant('butler')">
+                        <div class="assistant-img-wrapper">
+                            <img src="https://tanes.jp/wp-content/uploads/2025/10/真田くん-scaled.png" alt="執事 真田">
+                        </div>
+                        <div class="assistant-info">
+                            <h3>執事：真田くん</h3>
+                            <p>冷静沈着で頼れる<br>イケメン執事アシスタント</p>
+                        </div>
+                        <button class="select-assist-btn">真田くんにする</button>
+                    </div>
+
+                    <div class="assistant-card" onclick="submitAssistant('maid')">
+                        <div class="assistant-img-wrapper">
+                            <img src="https://tanes.jp/wp-content/uploads/2025/10/ココちゃん.png" alt="メイド ココ">
+                        </div>
+                        <div class="assistant-info">
+                            <h3>メイド：ココちゃん</h3>
+                            <p>元気いっぱいで明るい<br>可憐メイドアシスタント</p>
+                        </div>
+                        <button class="select-assist-btn">ココちゃんにする</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    　　　<!-- ヘッダーのメニュー表示画面-->
+        <div id="menu-overlay" onclick="toggleSideMenu()"></div>
+
+           <div id="side-menu">
+            <div class="menu-header">
+                <h3>設定・編集</h3>
+                <button class="menu-close-btn" onclick="toggleSideMenu()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <ul class="menu-list">
+                <li onclick="alert('基本情報の編集機能は準備中です')">
+                    <i class="fas fa-user-edit"></i> 基本情報の変更
+                </li>
+                <li onclick="alert('写真の変更機能は準備中です')">
+                    <i class="fas fa-camera"></i> プロフィール写真の変更
+                </li>
+                <li onclick="alert('通知設定機能は準備中です')">
+                    <i class="fas fa-bell"></i> 通知設定
+                </li>
+                <hr>
+                <li onclick="alert('ヘルプ機能は準備中です')">
+                    <i class="fas fa-question-circle"></i> ヘルプ・お問い合わせ
+                </li>
+                <li onclick="liff.closeWindow();">
+                    <i class="fas fa-sign-out-alt"></i> アプリを閉じる
+                </li>
+            </ul>
+           </div>
+        <!-- ヘッダーのメニュー表示画面ここまで-->
+        
+        <!-- レーダーチャートポップアップ-->
+            <div id="diagnosis-modal" class="modal-overlay">
+            <div class="modal-content-box">
+                <div class="modal-header">
+                    <h3>診断ステータス</h3>
+                    <button class="modal-close-btn" onclick="closeDiagnosisModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+                    <p class="chart-instruction">
+                        あなたの恋愛傾向分析結果です。<br>
+                        <small>※未診断の項目は「0」と表示されます。</small>
+                    </p>
+
+                    <div class="chart-container" style="position: relative; height:300px; width:100%">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+
+                    <div class="incomplete-alert" id="diagnosis-alert" style="display:none;">
+                        <i class="fas fa-exclamation-circle"></i> 未完了の診断があります
+                    </div>
+
+                    <button class="modal-action-btn" onclick="closeDiagnosisModal()">閉じる</button>
+                </div>
+            </div>
+        </div>
+        <!-- レーダーチャートポップアップここまで-->
+
+        <!-- マッチング（キュンキュン）演出です-->
+        <div id="match-success-page" class="page" style="display: none;">
+            <div class="match-container">
+                <div class="match-logo-container">
+                    <img src="img/logo.png" alt="Logo" class="match-logo">
+                </div>
+                <div class="match-title">
+                    KYUN ★ KYUN!
+                </div>
+                
+                <div class="match-animation-area">
+                    <div id="heartbeat-loader">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 298 53.9">
+                            <path class="heartbeat-path" d="M0.7,21.5h33.8l8.9,19.3l17-38.6l10.9,19.3h51l11.6,22l14.8-44.8l10.9,22.8h138.8"/>
+                        </svg>
+                    </div>
+                    <div class="match-user left">
+                        <img id="match-my-img" src="" alt="Me">
+                    </div>
+                    
+                    <div class="match-heart">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    
+                    <div class="match-user right">
+                        <img id="match-partner-img" src="" alt="Partner">
+                    </div>
+                </div>
+
+                <div class="match-message-box">
+                    <p>You matched with <strong id="match-partner-name">〇〇</strong>.</p>
+                    <div class="match-sub-text-box">
+                        Start your secret conversation now.
+                    </div>
+                </div>
+                <button class="match-action-btn" @click="goToSecretQuestionPhase">
+                   ヒミツの質問へ進む
+                </button>
+            </div>
+            </div>
+        
+        <!-- マッチング（キュンキュン）演出ここまで-->
+
+        <!-- ヒミツの質問画面-->
+        <div v-if="currentView === 'match-question'" class="step-container">
+      <h2 class="step-title">ヒミツの質問を設定</h2>
+      <p class="step-description">
+        お相手に聞きたいことを2つ選んで、<br>具体的な質問を入力してください。
+      </p>
+
+   <div class="topic-list">
+        <div v-for="(topic, index) in secretTopics" :key="index" 
+             class="topic-wrapper" 
+             :class="{ 'active': isTopicSelected(topic) }"> <button 
+            class="btn topic-btn" 
+            :class="{ 'selected': isTopicSelected(topic), 'disabled': !isTopicSelected(topic) && selectedTopics.length >= 2 }"
+            @click="toggleTopic(topic)"
+          >
+            {{ topic }}
+            <span v-if="isTopicSelected(topic)" class="check-mark">
+                <i class="fas fa-check"></i> </span>
+          </button>
+
+          <div v-if="isTopicSelected(topic)" class="input-slide-down">
+            <span class="input-label">具体的な質問を入力してください</span>
+            <input 
+              type="text" 
+              v-model="questionInputs[topic]" 
+              :placeholder="'例：' + getPlaceholder(topic)" 
+              class="input-text question-input"
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="action-area">
+        <button class="btn btn-submit" @click="submitSecretQuestions" :disabled="!isFormValid">
+          これで決定する
+        </button>
+      </div>
+    </div>
+    <!-- ヒミツの質問画面ここまで-->
+        
+</div><!-- 27行目<div id="app" style="display: none;">の閉じタグ-->
+
+    <div id="sync-button-container" style="display: none;">
+        
+        <div class="registration-content">
+            <p id="error-message"></p>
+            
+            <button id="sync-button" class="registration-button primary" onclick="syncAccount()">
+                初回登録（初めての方）
+            </button>
+            
+            <div class="registration-footer">
+                <a href="#">新規登録・ログインでお困りの方へ</a>
+                <p>本サービスは（株）リクルート（IRP含む）社員で、独身の方（離婚されている方も含む）のみが利用可能です。</p>
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="swiper-bundle.min.js"></script>
+   <script src="script.js?v=1.0.5"></script> 
+</body>
+</html>

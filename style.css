@@ -1,0 +1,1973 @@
+/* style.css (理想UIへの修正版) */
+:root {
+    --bg-color-light: #F7F7F7; /* 理想UIの背景色に近い色 */
+    --card-color-light: #FFFFFF;
+    --primary-text-light: #222222;
+    --secondary-text: #888;
+    
+    /* --- テーマカラー定義 --- */
+    --theme-color-pink: #EC027E;
+    /* 理想UIの紫 (ヘッダーグラデーション用) */
+    --theme-color-purple: #9B27AF; 
+    /* 理想UIの濃いピンク (ヘッダーグラデーション用) */
+    --theme-color-deep-pink: #E03C7E;
+    
+    --accent-color: var(--theme-color-pink);
+    --swiper-theme-color: var(--theme-color-pink);
+    --icon-color: #CCC;
+    --icon-active: var(--theme-color-pink);
+    --footer-height: 75px; /* フッターの高さを変数で定義 */
+}
+
+body { 
+    margin: 0; 
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
+    background-color: var(--bg-color-light); /* 理想UIの背景色 */
+    color: var(--primary-text-light); 
+    height: 100vh; 
+    /* overflow: hidden; */ /* ← スクロール可能にするためコメントアウト */
+}
+#app { display: none; }
+
+/* --- ページ共通 --- */
+.page { 
+    animation: fadeIn 0.5s ease-in-out; 
+    /* フッターナビの分だけ下部に余白を確保 */
+    padding-bottom: var(--footer-height); /* 変数を使用 */
+    /* padding-bottom: 80px; */
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+
+/* ▼▼▼▼▼ 理想UIのマイページスタイル ▼▼▼▼▼ */
+
+/* #my-page 専用のコンテナ設定を削除 */
+/* .container { ... } */
+
+/* 理想UIのプロフィールヘッダー */
+.profile-header { 
+    /* 理想UIのグラデーション（紫からピンクへ） */
+    background: linear-gradient(135deg, var(--theme-color-purple) 0%, var(--theme-color-deep-pink) 100%);
+    color: white;
+    padding: 30px 24px 30px 24px; /* 高さを調整 */
+    text-align: center;
+    position: relative; 
+    /* 理想UIのカーブ */
+    border-radius: 0 0 45% 45% / 0 0 35px 35px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: -15px; /* メインコンテンツと少し重ねる */
+    z-index: 5;
+}
+.profile-header img { 
+    width: 100px; /* 理想UIに合わせて少し小さく */
+    height: 100px; 
+    border-radius: 50%; 
+    object-fit: cover; 
+    border: 4px solid var(--card-color-light);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    padding: 0;
+    background: none;
+}
+.profile-header h2 { 
+    margin: 12px 0 4px 0; /* 余白調整 */
+    font-size: 22px; 
+    font-weight: 600; 
+    color: white;
+}
+/* 理想UIの「28歳・〇〇」のスタイル */
+#user-details {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    color: white;
+    opacity: 0.9;
+}
+
+/* 理想UIのメインコンテンツエリア */
+#my-page .main-content {
+    padding: 0 16px; /* 左右に余白 */
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* 各セクション間の余白 */
+}
+
+/* 理想UIの「今日のピックアップ」 */
+.pickup-section {
+    background-color: var(--theme-color-deep-pink);
+    color: white;
+    text-align: center;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 30px; /* ヘッダーと重なる分＋余白 */
+}
+.pickup-section h3 {
+    margin: 0;
+    font-size: 1em; /* 親のフォントサイズを継承 */
+}
+
+/* 理想UIのメトリクス */
+.metrics { 
+    display: flex; 
+    gap: 16px; 
+    /* margin-bottom: 0; */ /* main-contentのgapで管理 */
+    margin-left: 0; /* 左右余白は親(.main-content)で管理 */
+    margin-right: 0;
+}
+.metric-card { 
+    flex: 1; 
+    background-color: var(--card-color-light); 
+    border-radius: 12px; 
+    padding: 16px; /* 少し小さく */
+    text-align: center; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
+}
+.metric-label { 
+    display: block; 
+    font-size: 13px; /* 少し小さく */
+    color: var(--secondary-text); 
+    margin-bottom: 6px; 
+}
+.metric-value { 
+    font-size: 26px; /* 少し小さく */
+    font-weight: 700; 
+    color: var(--accent-color); 
+}
+
+/* 理想UIのピックアップユーザー */
+.pickup-users {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 10px 0;
+}
+.pickup-users img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 理想UIのタイムライン */
+.timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.timeline-item {
+    background-color: var(--card-color-light);
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+.timeline-item img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.timeline-item p {
+    margin: 0;
+    flex-grow: 1;
+    font-size: 14px;
+    line-height: 1.4;
+}
+.timeline-item i {
+    font-size: 20px;
+    color: var(--theme-color-pink);
+}
+/* タイムライン（ボタン付き） */
+.timeline-item-action {
+    flex-wrap: wrap; /* ボタンがはみ出たら改行 */
+}
+.timeline-item-content {
+    flex-grow: 1;
+}
+.timeline-subtext {
+    font-size: 12px !important;
+    color: var(--secondary-text);
+}
+.timeline-button {
+    background-color: var(--theme-color-purple);
+    color: white;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 20px;
+    margin-left: auto; /* 右寄せ */
+}
+
+/* 旧フッター*/
+.footer-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: var(--footer-height); 
+    background-color: var(--card-color-light);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    border-top: 1px solid #f0f0f0;
+    padding-bottom: 13px; 
+    box-sizing: border-box; 
+    z-index: 100;
+}
+.footer-nav .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--secondary-text);
+    font-size: 10px;
+    gap: 2px;
+    flex: 1; 
+    padding-top: 5px; 
+}
+.footer-nav .nav-item i {
+    font-size: 20px;
+}
+.footer-nav .nav-item.active {
+    color: var(--theme-color-pink);
+}
+
+/* ▼▼▼ フッターメニューのスタイル修正 ▼▼▼ */
+
+
+/* 真ん中の強調ボタンのラッパー */
+.nav-center-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    top: -15px; /* 上にずらす */
+}
+
+/* 真ん中の円形ボタン */
+.nav-item-center {
+    width: 56px;
+    height: 56px;
+    background: #b8e0f9; /* ロゴの青色を背景に0a1f88 */
+    border-radius: 50%; /* 円形に */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 -3px 8px rgba(0, 0, 0, 0.2); /* 上向きの影 */
+    border: 4px solid #fff; /* 背景と同化する白い枠線 */
+    text-decoration: none;
+    transition: transform 0.1s;
+}
+
+.nav-item-center:active {
+    transform: scale(0.95);
+}
+
+/* 真ん中のロゴ画像 */
+.footer-logo {
+    width: 45px; /* ロゴのサイズ調整 */
+    height: auto;
+}
+
+/* 真ん中のラベルテキスト */
+.nav-center-label {
+    font-size: 10px;
+    color: #aaa;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+/* 真ん中がアクティブな時のスタイル */
+.nav-item-center.active {
+    background: #f7cfe3; /* アクティブ時はピンクに #F6178C*/
+}
+.nav-center-label.active {
+    color: #F6178C;
+}
+
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+
+
+
+
+/* 既存の .actions は 理想UI では使わないため非表示 */
+.actions { 
+    display: none; 
+}
+
+/* ▲▲▲▲▲ 理想UIのマイページスタイルここまで ▲▲▲▲▲ */
+
+
+/* --- ローディング画面 (変更なし) --- */
+#loader-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color-light); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 1; visibility: visible; transition: opacity 0.5s ease-out, visibility 0.5s ease-out; }
+#loader-wrapper.is-hidden { opacity: 0; visibility: hidden; }
+.loader-content { text-align: center; }
+.spinner { 
+    border: 4px solid transparent;
+    border-top-color: #EC027E;
+    border-bottom-color: #0E1F89;
+    border-radius: 50%; 
+    width: 40px; 
+    height: 40px; 
+    margin: 0 auto 24px auto; 
+    animation: spin 1.0s linear infinite; 
+}
+.loader-text-container { position: relative; height: 20px; color: var(--secondary-text); }
+.loading-text-item { position: absolute; width: 100%; left: 0; text-align: center; opacity: 0; white-space: nowrap; animation-name: fadeInOut; animation-duration: 1.5s; animation-fill-mode: both; }
+.loading-text-item:nth-child(1) { animation-delay: 0.1s; }
+.loading-text-item:nth-child(2) { animation-delay: 1.6s; }
+.loading-text-item:nth-child(3) { animation-delay: 3.1s; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeInOut { 0% { opacity: 0; transform: translateY(10px); } 20% { opacity: 1; transform: translateY(0); } 80% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-10px); } }
+
+/* --- 旧ユーザー画面 (停止中) 
+#user-grid-page .page-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid #e0e0e0; background-color: var(--card-color-light); }
+#user-grid-page .page-header h1 { margin: 0; font-size: 18px; position: absolute; left: 50%; transform: translateX(-50%); }
+#user-grid-page .back-button { color: var(--primary-text-light); text-decoration: none; font-size: 14px; }
+.user-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px; }
+.user-card { background-color: var(--card-color-light); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; }
+.user-card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+.user-info { padding: 12px; }
+.user-name { font-weight: 600; font-size: 15px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.user-details { font-size: 12px; color: var(--secondary-text); display: block; }
+--- */
+/* === グリッド表示画面のデザイン === 
+.user-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 15px;
+    padding: 15px;
+    padding-bottom: 80px; 
+    overflow-y: auto;
+}
+.grid-user-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    position: relative;
+    aspect-ratio: 3/4; 
+}
+.grid-user-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.grid-user-info-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    padding: 20px 10px 10px;
+    box-sizing: border-box;
+    color: white;
+}
+.grid-user-name {
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin: 0;
+}
+.grid-user-meta {
+    font-size: 0.75rem;
+    opacity: 0.9;
+}
+*/
+
+
+/* =========================================
+   さがすページ（スワイプ＆グリッド統合版）修正版
+   ========================================= */
+
+/* ページ全体のコンテナ設定 */
+#search-page {
+    padding-bottom: 0;
+}
+
+#search-page .app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-width: 420px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, #E0F7FA 0%, #FCE4EC 100%);
+    padding-bottom: var(--footer-height);
+    box-sizing: border-box;
+}
+
+/* ヘッダー */
+#search-page .app-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 20px; background-color: rgba(255,255,255,0.95);
+    border-bottom: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    z-index: 10; flex-shrink: 0; height: 50px;
+    position: relative;
+}
+#search-page .icon-btn { background: none; border: none; font-size: 1.2rem; color: #999; cursor: pointer; padding: 5px; width: 40px; }
+#search-page .back-button { color: #999; text-decoration: none; }
+
+/* 中央の表示切り替えボタン */
+.header-center-action {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+}
+.view-toggle-btn {
+    background-color: #888; color: white; border: none; border-radius: 6px;
+    width: 36px; height: 36px; display: flex; justify-content: center; align-items: center;
+    font-size: 1rem; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: transform 0.1s;
+}
+.view-toggle-btn:active { transform: translate(-50%, -50%) scale(0.95); }
+
+/* メインコンテンツエリア */
+#search-page .main-content {
+    flex-grow: 1; position: relative; 
+    display: block; 
+    width: 100%; 
+    height: 100%; /* 親のflex-growに従う */
+    overflow: hidden; 
+}
+
+/* -----------------------------------------
+   ① スワイプ表示エリアのデザイン（位置調整版）
+   ----------------------------------------- */
+#swipe-view-area {
+    display: flex;
+    align-items: center;     /* 垂直方向中央揃え */
+    justify-content: center; /* 水平方向中央揃え */
+    height: 100%; 
+    width: 100%;
+    
+    /* ▼▼▼ 位置修正のポイント ▼▼▼ */
+    /* ヘッダーの圧迫感を消すため、少し下にずらすためのパディング */
+    padding-top: 20px; 
+    padding-bottom: 1px;/* 元は20px */
+    box-sizing: border-box;
+
+    /* ▼▼▼ ロゴ背景の設定 ▼▼▼ */
+    background-image: url('img/logo.png'); /* ロゴ画像のパス */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100px auto; /* ロゴの大きさ（適宜調整） */
+    
+    /* 読み込み中っぽくロゴをゆっくり点滅させる */
+    animation: logoPulse 2s infinite ease-in-out;
+}
+/* 点滅アニメーション定義 */
+/*@keyframes logoPulse {
+    0% { background-color: transparent; opacity: 0.6; }
+    50% { background-color: transparent; opacity: 1; }
+    100% { background-color: transparent; opacity: 0.6; }
+}*/
+
+#search-page .swiper {
+    width: calc(100% - 30px); 
+    height: 80%; 
+    max-height: 580px; 
+    overflow: visible;
+    /* カードが重なるとき、Swiper自体は不透明にせず背景を見せる */
+    z-index: 5; 
+}
+
+#search-page .swiper {
+    width: calc(95% - 30px); 
+    
+    /* ▼▼▼ 高さ調整のポイント ▼▼▼ */
+    /* 画面いっぱいではなく、少し高さを抑えることで真ん中感を出す */
+    height: 88%; 
+    max-height: 580px; 
+    overflow: visible;
+}
+#search-page .swiper-slide { background-color: transparent; box-shadow: none; }
+
+/* カードデザイン */
+#search-page .profile-card {
+    width: 100%; height: 100%; background: transparent; box-shadow: none;
+    border-radius: 0; display: flex; flex-direction: column; position: relative;
+}
+
+/* 影レイヤー */
+#search-page .profile-card::after {
+    content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 92%; height: 65%; border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    z-index: 0;
+}
+
+/* 下部の白い情報エリア */
+#search-page .profile-card::before {
+    content: ""; position: absolute; bottom: 0; left: 0;
+    width: 100%; height: 68%;
+    background: #fff; border-radius: 25px;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+    z-index: 1;
+}
+
+/* 画像エリア */
+#search-page .profile-image {
+    position: relative; width: 92%; height: 65%; margin: 0 auto;
+    border-radius: 20px; box-shadow: none; overflow: hidden;
+    flex-shrink: 0; background: #f0f0f0; z-index: 2;
+}
+#search-page .profile-image img {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;
+}
+#search-page .profile-image::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 100px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.2), transparent); pointer-events: none;
+}
+
+/* タグとボタン */
+#search-page .age-tags {
+    position: absolute; top: 15px; left: 15px; z-index: 5; display: flex; gap: 8px;
+}
+#search-page .age-tags span {
+    background-color: #2ECC71; color: #fff; font-size: 0.7rem; font-weight: bold;
+    padding: 6px 12px; border-radius: 20px; box-shadow: 0 2px 5px rgba(46, 204, 113, 0.4);
+    display: flex; align-items: center; gap: 4px;
+}
+#search-page .more-btn {
+    /*position: absolute; bottom: 15px; right: 15px;
+    background: linear-gradient(135deg, #FF5E62, #FF9966);
+    color: white; border: none; border-radius: 50px;
+    padding: 8px 20px; font-size: 0.9rem; font-weight: bold;
+    box-shadow: 0 4px 15px rgba(255, 94, 98, 0.5);
+    cursor: pointer; z-index: 5; display: flex; align-items: center; gap: 5px;*/
+    position: absolute; bottom: 15px; right: 15px;
+    /* マイページヘッダーと同じ 紫(#9B27AF) -> 濃いピンク(#E03C7E) */
+    background: linear-gradient(135deg, #9B27AF 0%, #E03C7E 100%);
+    color: white; border: none; border-radius: 50px;
+    padding: 8px 20px; font-size: 0.9rem; font-weight: bold;
+    box-shadow: 0 4px 15px rgba(224, 60, 126, 0.4); /* 影もピンク寄りに */
+    cursor: pointer; z-index: 5; display: flex; align-items: center; gap: 5px;
+}
+/* 新規追加: 職種（job）タグのデザイン */
+.job-tag {
+    background-color: #6c5ce7; /* 少し落ち着いた紫（またはお好みの色） */
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: normal;
+    padding: 3px 10px;
+    border-radius: 12px; /* 丸みのある長方形 */
+    margin-left: 8px; /* 名前との距離 */
+    white-space: nowrap; /* 折り返し防止 */
+    display: inline-block;
+    vertical-align: middle;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* プロフィール情報テキスト */
+#search-page .profile-info {
+    position: relative; z-index: 2; padding: 20px 25px 0;
+    flex-shrink: 0; text-align: left; margin-top: 5px;
+}
+.name-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+#search-page .profile-info h2 { margin: 0; font-size: 1.4rem; color: #333; font-weight: 700; }
+.age-text { font-size: 1rem; color: #666; font-weight: normal; }
+.location-text { font-size: 0.9rem; color: #888; margin-left: auto; }
+.status-row { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; font-size: 0.8rem; color: #2ECC71; font-weight: bold; }
+.status-dot { width: 8px; height: 8px; background-color: #2ECC71; border-radius: 50%; }
+.bio-text {
+    font-size: 0.85rem; color: #666; line-height: 1.4;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    margin: 0 0 10px 0;
+}
+
+/* アイコンエリア */
+#search-page .interest-icons {
+    position: relative; z-index: 2; display: flex; justify-content: flex-start; align-items: center;
+    gap: 10px; padding: 0 25px 20px; flex-shrink: 0;
+}
+.common-points-label { font-size: 0.75rem; color: #FF5E62; font-weight: bold; margin-right: 5px; }
+#search-page .icon-circle {
+    width: 32px; height: 32px; border-radius: 8px; background-color: #fff0f5;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 0.9rem; color: #FF5E62; border: none;
+}
+
+/* -----------------------------------------
+   ② グリッド表示エリアのデザイン（修正版）
+   ----------------------------------------- */
+/* 枠組み（スクロール用） */
+#grid-view-area {
+    padding-top: 10px;
+    height: 100%;
+    box-sizing: border-box;
+    overflow-y: auto; /* ここでスクロールさせる */
+    padding-bottom: 80px; /* フッター被り防止 */
+}
+
+/* ★修正: 中身のコンテナ（ID指定に変更）に対してGridを適用 */
+#user-grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 確実に2列にする */
+    gap: 15px;
+    padding: 15px;
+    /* heightは指定しない（中身に応じて伸びる） */
+    box-sizing: border-box;
+}
+
+/* 以前のクラス定義（.user-grid）が邪魔しないように調整 */
+/* もしHTML側のクラスが残っていても、IDセレクタ(#user-grid-container)が優先されるのでOK */
+
+.grid-user-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    position: relative;
+    aspect-ratio: 3/4; 
+}
+
+.grid-user-image {
+    width: 100%; height: 100%; object-fit: cover;
+}
+
+.grid-user-info-overlay {
+    position: absolute; bottom: 0; left: 0; width: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    padding: 20px 10px 10px; box-sizing: border-box; color: white;
+}
+
+.grid-user-name { font-size: 0.9rem; font-weight: bold; margin: 0; }
+.grid-user-meta { font-size: 0.75rem; opacity: 0.9; margin: 2px 0 0; }
+
+/* --- ユーザーグリッドページここまで--- */
+
+/* ▼▼▼ カード内「プロフィール」ボタンのデザイン ▼▼▼ */
+#search-page .profile-detail-btn {
+    position: absolute; 
+    bottom: 15px; 
+    left: 15px; /* 画像の左下に配置 */
+    
+    /* デザイン設定（白ベースで見やすく） */
+    background: rgba(255, 255, 255, 0.95);
+    color: #333; 
+    border: none; 
+    border-radius: 20px;
+    padding: 8px 16px; 
+    font-size: 0.8rem; 
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    cursor: pointer; 
+    z-index: 5; 
+    display: flex; 
+    align-items: center; 
+    gap: 5px;
+    transition: transform 0.1s;
+}
+
+#search-page .profile-detail-btn:active {
+    transform: scale(0.95);
+    background: #f0f0f0;
+}
+
+#search-page .profile-detail-btn i {
+    color: #EC027E; /* アイコンをテーマカラーに */
+}
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+/* ---------------------------------  --- */
+
+
+
+
+
+/* ---------------------------------  --- */
+/* --- 登録/連携画面のスタイル (変更なし) --- */
+#sync-button-container {
+    position: fixed; top: 0; left: 0; width: 100%;
+    height: 100vh; height: -webkit-fill-available;
+    transform: none; text-align: left; background-color: #fff;
+    padding: 0; border-radius: 0; box-shadow: none;
+    background-image: url('img/bg-register.png'); 
+    background-size: cover; background-position: center center;
+    display: flex; flex-direction: column;
+}
+.registration-content {
+    background-color: white; padding: 30px 20px 40px 20px;
+    border-top-left-radius: 30px; border-top-right-radius: 30px;
+    display: flex; flex-direction: column; gap: 15px;
+    text-align: center; box-shadow: 0 -5px 30px rgba(0,0,0,0.1);
+    position: fixed; bottom: 0; left: 0; right: 0;
+}
+#error-message {
+    color: #E63946; font-size: 14px; font-weight: 500; margin: 0;
+}
+.registration-button.primary {
+    background-color: #F5AAB9; color: white; border: none;
+    border-radius: 30px; padding: 16px; font-size: 16px;
+    font-weight: bold; text-align: center; text-decoration: none;
+    cursor: pointer; width: 100%; transition: background-color 0.2s;
+}
+.registration-button.primary:disabled { background-color: #CCC; }
+.registration-button.primary:hover:not(:disabled) { background-color: #E6859A; }
+.registration-button.secondary {
+    background-color: var(--card-color-light); color: #F5AAB9;
+    border: 1px solid #F5AAB9; border-radius: 30px;
+    padding: 16px; font-size: 16px; font-weight: bold;
+    text-align: center; text-decoration: none; cursor: pointer;
+    width: 100%; box-sizing: border-box;
+    transition: background-color 0.2s, color 0.2s;
+}
+.registration-button.secondary:hover:not(:disabled) {
+    background-color: #fdf0f3; color: #E6859A;
+}
+.registration-footer {
+    text-align: center; font-size: 12px; color: #888;
+}
+.registration-footer a {
+    color: #E6859A; text-decoration: none;
+    font-weight: 500; font-size: 13px;
+}
+.registration-footer p {
+    margin-top: 10px; line-height: 1.5; margin-bottom: 0;
+}
+
+/* ▼▼▼ 性別選択画面のスタイル ▼▼▼ */
+.gender-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* height: 100vh; */
+    padding: 20px;
+    text-align: center;
+    background-color: var(--bg-color-light);
+}
+.gender-container h2 { margin-bottom: 10px; }
+.gender-container p { color: var(--secondary-text); margin-bottom: 40px; }
+
+.gender-buttons {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    max-width: 400px;
+}
+.gender-btn {
+    flex: 1;
+    padding: 40px 20px;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.gender-btn i { font-size: 2.5rem; }
+.gender-btn:active { transform: scale(0.95); }
+.gender-btn.male { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.gender-btn.female { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); }
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+/* ▼▼▼ 入力フォーム画面の追加スタイル ▼▼▼ */
+.input-group {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.registration-input {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    outline: none;
+    transition: border-color 0.3s;
+    box-sizing: border-box; /* パディングを含めた幅計算 */
+}
+
+.registration-input:focus {
+    border-color: var(--accent-color);
+}
+
+/* 「次へ」ボタンのスタイル（性別ボタンのスタイルをベースに調整） */
+.gender-btn.next-step {
+    background: linear-gradient(135deg, #BB86FC 0%, #7c4dff 100%);
+    flex-direction: row; /* 横並び */
+    justify-content: center;
+    padding: 20px;
+    height: auto;
+}
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+/* ▼▼▼ セレクトボックスのスタイル (Step 6用) ▼▼▼ */
+.registration-select {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    outline: none;
+    background-color: #fff;
+    appearance: none; /* デフォルトの矢印を消す（モダンブラウザ用） */
+    -webkit-appearance: none;
+    cursor: pointer;
+    /* カスタム矢印アイコン（SVG等を使うのが一般的ですが、ここでは簡易的に文字や枠線で調整） */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px;
+}
+
+.registration-select:focus {
+    border-color: var(--accent-color);
+}
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+/* ... (既存のスタイル) ... */
+
+/* ▼▼▼ 所属選択ボタン (Step 6) のスタイル ▼▼▼ */
+/* ---※ステップ６のプルダウン選択をやめたので、この項目は削除した方が良いかも--- */
+.department-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2列で表示 */
+    gap: 15px; /* ボタン同士の間隔 */
+    margin-top: 20px;
+}
+
+.dept-btn {
+    border: none;
+    border-radius: 15px;
+    padding: 20px 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 80px; /* ボタンの高さを揃える */
+    line-height: 1.4;
+}
+
+.dept-btn:active {
+    transform: scale(0.95);
+}
+/* ---※ステップ６のプルダウン選択をやめたので、この項目は削除した方が良いかも--- */
+/*  ここまで▲▲▲所属選択ボタン (Step 6) のスタイル ▲▲▲ */
+
+
+/* --- おしゃれな色分け (各ボタンに異なるグラデーション) --- */
+
+/* 1. HR・人材: 信頼のブルー */
+.dept-btn:nth-child(1) { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+
+/* 2. 住まい: 安心のグリーン */
+.dept-btn:nth-child(2) { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+
+/* 3. 結婚: 幸せのピンク */
+.dept-btn:nth-child(3) { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); }
+
+/* 4. 車: アクティブなオレンジ (カーセンサー色もイメージ) */
+.dept-btn:nth-child(4) { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);}
+
+/* 5. 教育・進路: 知的なインディゴ */
+.dept-btn:nth-child(5) { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+
+/* 6. 旅行・レジャー: 楽しいイエロー・オレンジ */
+.dept-btn:nth-child(6) { background: linear-gradient(135deg, #fddb92 0%, #d1fdff 100%); color: #444; }
+
+/* 7. 飲食: 食欲のオレンジレッド */
+.dept-btn:nth-child(7) { background: linear-gradient(135deg, #ff6b6b 0%, #f06595 100%); }
+
+/* 8. ビューティー: 華やかなパープル */
+.dept-btn:nth-child(8) { background: linear-gradient(135deg, #c471f5 0%, #fa71cd 100%); }
+
+/* 9. その他: シックなグレー・シルバー */
+/* 奇数個なので、最後の要素(9番目)を横幅いっぱいに広げます */
+.dept-btn:nth-child(9) { 
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); 
+    color: #444; 
+    grid-column: 1 / -1; /* 横幅いっぱいに表示 */
+}
+
+/* ... (既存のスタイル) ... */
+
+/* ▼▼▼ 案内ページ (オンボーディング) のスタイル ▼▼▼ */
+#onboarding-page {
+    /* 画面全体を使って中央揃え */
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* フッターナビがある場合は調整が必要 */
+    padding-bottom: 80px; /* ボタンエリアの分空ける */
+    box-sizing: border-box;
+    background: linear-gradient(to bottom, #fff 0%, #fdfdfd 100%);
+}
+
+.onboarding-swiper {
+    width: 100%;
+    flex-grow: 1; /* 残りの縦幅いっぱいに広げる */
+}
+
+.onboarding-slide {
+    display: flex;
+    flex-direction: column; /* 縦並び */
+    align-items: center;
+    justify-content: flex-start; /* 上詰めにする */
+    text-align: center;
+    /* ★修正: 親要素のパディングを削除（画像を画面いっぱいにするため） */
+    padding: 0; 
+    box-sizing: border-box;
+    /* スクロール可能にする（画像が縦長の場合の保険） */
+    overflow-y: auto; 
+    padding-bottom: 60px; /* フッターボタンの裏に隠れないように */
+}
+/* ★新規: 画像のスタイル */
+.onboarding-image {
+    width: 100%;       /* 横幅いっぱい */
+    height: auto;      /* 高さは比率を保って自動調整 */
+    display: block;    /* 余計な隙間を消す */
+    margin: 20px 0;    /* 上下の余白（お好みで調整） */
+    object-fit: cover; /* 枠にフィットさせる */
+}
+
+/* ★新規: テキストエリアのスタイル（文字部分だけに余白を持たせる） */
+.slide-text-area {
+    width: 100%;
+    padding: 0 20px; /* 横に20pxずつの余白 */
+    box-sizing: border-box;
+}
+/* 既存のタイトル・本文スタイル調整 */
+.slide-text-area h2 {
+    font-size: 20px;
+    color: #333;
+    margin-top: 30px; /* 上の余白 */
+    margin-bottom: 15px;
+    line-height: 1.4;
+    font-weight: bold;
+}
+
+.slide-text-area p {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+/* 画像プレースホルダー（実際はimgタグなどに置き換えてください） */
+.slide-image-placeholder {
+    width: 280px;
+    height: 280px;
+    margin: 0 auto 30px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 20px; /* 角丸の例 */
+}
+
+.photo-tips small {
+    display: block;
+    color: #999;
+    margin-top: 10px;
+}
+
+/* ページネーション（ドット）のカスタマイズ */
+.swiper-pagination.onboarding-pagination {
+    bottom: 20px !important; /* 位置調整 */
+}
+.swiper-pagination.onboarding-pagination .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background: #ccc;
+    opacity: 1;
+}
+.swiper-pagination.onboarding-pagination .swiper-pagination-bullet-active {
+    background: #ff6b6b; /* アクティブなドットの色（ピンク） */
+    width: 12px;
+    height: 12px;
+}
+
+/* 下部固定のアクションボタンエリア */
+.onboarding-footer {
+    position: fixed;
+    bottom: 20px;/* 元は「0」*/
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background: rgba(255,255,255,0.9);
+    box-sizing: border-box;
+    z-index: 10;
+}
+
+/* メインアクションボタン（提供画像のピンクボタン風） */
+.main-action-btn {
+    width: 100%;
+    padding: 18px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background: #ff6b6b; /* ピンク色 */
+    border: none;
+    border-radius: 30px; /* 丸み */
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
+    transition: background 0.3s, transform 0.1s;
+}
+.main-action-btn:active {
+    transform: scale(0.98);
+    background: #fa5252;
+}
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+/* ▼▼▼ 登録用ヘッダーのデザイン ▼▼▼ */
+#registration-header {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 20px; /* 下に余白 */
+    padding: 20px 20px 0;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* プログレスバーエリア */
+.progress-area {
+    width: 100%;
+}
+
+.progress-label {
+    text-align: right; /* 右寄せ */
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 5px;
+    font-family: 'Arial', sans-serif;
+}
+
+.step-text {
+    font-weight: bold;
+    font-size: 12px;
+    color: #bbb;
+    margin-right: 5px;
+}
+
+.current-num {
+    font-weight: bold;
+    color: var(--accent-color, #F6178C); /* ピンク色 */
+    font-size: 18px;
+}
+
+.total-num {
+    color: #ccc;
+    font-size: 14px;
+}
+
+/* バーの背景 */
+.progress-bar-bg {
+    width: 100%;
+    height: 6px;
+    background-color: #eee;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+/* バーの中身（動く部分） */
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #091F88 0%, #F6178C 100%); /* ロゴ色に合わせたグラデーション */
+    width: 0%;
+    transition: width 0.4s ease; /* なめらかに動く */
+    border-radius: 3px;
+}
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+
+/* ▼▼▼ ヘッダーのレイアウト修正 (戻るボタン追加用) ▼▼▼ */
+
+/* 上段のコンテナ（ボタンとロゴ） */
+.header-top-row {
+    position: relative; /* 子要素の基準位置にする */
+    display: flex;
+    justify-content: center; /* ロゴを中央揃え */
+    align-items: center;
+    margin-bottom: 15px;
+    height: 50px; /* 高さ確保 */
+}
+
+/* 戻るボタンのスタイル */
+.header-back-btn {
+    position: absolute; /* 絶対配置で左端へ */
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%); /* 上下中央揃え */
+    
+    /* ボタンとしてのデザイン */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px; /* アイコンと文字の間隔 */
+    
+    background-color: #f0f0f0; /* 薄いグレーの背景 */
+    border: none;
+    border-radius: 20px; /* 角丸（カプセル型） */
+    padding: 8px 14px;   /* 内側の余白 */
+    
+    /* 文字のスタイル */
+    font-size: 13px;
+    font-weight: bold;
+    color: #555;
+    
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+    
+    /* スマホで改行されないようにする */
+    white-space: nowrap;
+}
+.header-back-btn i {
+    font-size: 12px; /* アイコンサイズ微調整 */
+}
+
+/* タップ時のアクション */
+.header-back-btn:active {
+    background-color: #e0e0e0; /* 背景を少し濃く */
+    transform: translateY(-50%) scale(0.95); /* 押した感触 */
+}
+
+/* ロゴコンテナ（微調整） */
+/* ボタンと被らないように少し余白を持たせる場合の保険（通常はabsoluteなので不要ですが念のため） */
+.reg-logo-container {
+    pointer-events: none; /* ロゴがボタンの邪魔をしないように */
+}
+
+/* ロゴサイズ（前回と同じですが確認用） */
+.reg-logo {
+    height: 40px; /* 少し高さを抑えてバランスを取る */
+    width: auto;
+}
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+/* ... (既存のスタイル) ... */
+
+/* ▼▼▼ アシスタント選択画面のデザイン ▼▼▼ */
+.assistant-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2列表示 */
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.assistant-card {
+    background: #fff;
+    border: 2px solid #eee;
+    border-radius: 15px;
+    padding: 15px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.assistant-card:active {
+    transform: scale(0.96);
+    border-color: #F6178C;
+}
+
+.assistant-img-wrapper {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 10px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #f9f9f9;
+}
+
+.assistant-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.assistant-info h3 {
+    font-size: 16px;
+    color: #333;
+    margin: 5px 0;
+}
+
+.assistant-info p {
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.select-assist-btn {
+    background: #444;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px;
+    font-size: 12px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.assistant-card:hover .select-assist-btn {
+    background: #F6178C; /* ホバー時(PC)などに色を変える */
+}
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+/* ▼▼▼ サイドメニュー関連のデザイン ▼▼▼ */
+
+/* 右上のメニューアイコンボタン */
+.menu-icon-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: white; /* 背景白で見やすく */
+    border: none;
+    border-radius: 50%; /* 丸くする */
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    cursor: pointer;
+    z-index: 100; /* 他の要素より上に */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.menu-icon-btn:active {
+    background: #f0f0f0;
+    transform: scale(0.95);
+}
+
+/* オーバーレイ（メニューが開いた時の背景） */
+#menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* 半透明の黒 */
+    z-index: 9998; /* メニューの下、アプリの上 */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+#menu-overlay.is-active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* サイドメニュー本体 */
+#side-menu {
+    position: fixed;
+    top: 0;
+    right: -85%; /* 初期状態は画面外（右側）に隠す */
+    width: 80%;  /* 画面幅の80% */
+    height: 100%;
+    background: #fff;
+    z-index: 9999; /* 最前面 */
+    box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+    transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* スムーズなスライド */
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+/* メニューが開いた状態（左へスライドして画面に入る） */
+#side-menu.is-active {
+    right: 0;
+}
+
+/* メニュー内のヘッダー */
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+.menu-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+.menu-close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #888;
+    cursor: pointer;
+}
+
+/* メニューリスト */
+.menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.menu-list li {
+    padding: 15px 10px;
+    font-size: 16px;
+    color: #333;
+    border-bottom: 1px solid #f9f9f9;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 15px; /* アイコンと文字の間隔 */
+}
+.menu-list li i {
+    color: #F6178C; /* アクセントカラー */
+    width: 20px;
+    text-align: center;
+}
+.menu-list li:active {
+    background-color: #f5f5f5;
+}
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+
+/* ▼▼▼ プロフィール写真登録促進エリアのデザイン ▼▼▼ */
+.photo-upload-promo {
+    margin: 20px 0; /* 上下の余白 */
+    padding: 0 15px; /* 左右の余白 */
+}
+
+.promo-card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* ふんわりした影 */
+    border: 1px solid #f0f0f0;
+}
+
+.promo-icon {
+    width: 60px;
+    height: 60px;
+    background: #fdf2f8; /* 薄いピンク背景 */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.promo-icon i {
+    font-size: 28px;
+    color: #F6178C; /* ロゴのピンク色 */
+}
+
+.promo-content h3 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin: 0 0 8px;
+}
+
+.promo-content p {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+    margin: 0 0 20px;
+}
+
+.promo-btn {
+    width: 100%;
+    max-width: 250px; /* 横幅が広がりすぎないように制限 */
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    /* ロゴの青とピンクを使ったグラデーション */
+    background: linear-gradient(90deg, #091F88 0%, #F6178C 100%);
+    border: none;
+    border-radius: 25px; /* 丸みのあるボタン */
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(246, 23, 140, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.promo-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 5px rgba(246, 23, 140, 0.2);
+}
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+/* ▼▼▼ モーダル（ポップアップ）のスタイル ▼▼▼ */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* 背景を暗く */
+    z-index: 10000; /* 最前面 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content-box {
+    background: #fff;
+    width: 85%;
+    max-width: 350px;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-overlay.is-open .modal-content-box {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #999;
+    cursor: pointer;
+}
+
+/* ポイント表示部分 */
+.point-summary {
+    text-align: center;
+    margin-bottom: 25px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.point-summary .label {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.point-summary .value {
+    font-size: 32px;
+    font-weight: bold;
+    color: #F6178C; /* アクセントカラー */
+}
+
+.point-summary .unit {
+    font-size: 14px;
+    color: #333;
+    margin-left: 5px;
+}
+
+/* リスト部分 */
+.point-details-list {
+    margin-bottom: 20px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+}
+
+.detail-item.alert .detail-value {
+    color: #ff5252; /* 期限切れ間近は赤く */
+    font-weight: bold;
+}
+
+.divider {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 15px 0;
+}
+
+.modal-note {
+    font-size: 11px;
+    color: #999;
+    line-height: 1.4;
+    margin-bottom: 20px;
+}
+
+.modal-action-btn {
+    width: 100%;
+    padding: 12px;
+    background: #333;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    font-size: 14px;
+    cursor: pointer;
+}
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+/* ... (既存のスタイル) ... */
+
+/* ▼▼▼ 診断チャート用スタイル ▼▼▼ */
+.chart-instruction {
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.incomplete-alert {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ffeeba;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+/* === マッチング演出画面のデザイン（シンプル&クール版） === */
+#match-success-page {
+    /* ▼▼▼ 背景色を単色に変更（参考画像のようなテラコッタ系） ▼▼▼ */
+    background: #D65A5A; 
+    /* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+    height: 100vh;
+    display: flex; /* JSでflexに戻される前提 */
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    color: #fff; /* 文字色を白で統一 */
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* モダンなフォント */
+}
+
+.match-container {
+    text-align: center;
+    z-index: 10;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 20px; /* 余白を広めに */
+}
+
+/* タイトル */
+.match-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: none; /* 影を削除 */
+    margin-bottom: 60px;
+    letter-spacing: 3px; /* 文字間隔を広げてスタイリッシュに */
+    opacity: 0;
+    animation: fadeInUpSimple 1s ease forwards;
+}
+.title-star { display: none; } /* 星は非表示 */
+
+/* アイコンとハートのアニメーションエリア */
+.match-animation-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+    position: relative;
+    margin-bottom: 60px;
+}
+
+.match-user {
+    position: absolute;
+    transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1); /* シャープな動き */
+}
+
+.match-user img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15); /* 影を調整 */
+    object-fit: cover;
+}
+
+/* 初期位置 */
+.match-user.left { transform: translateX(-120px); opacity: 0; }
+.match-user.right { transform: translateX(120px); opacity: 0; }
+
+/* アニメーション終了位置（回転なしでシンプルに） */
+.match-animation-area.animate .match-user.left { transform: translateX(-50px); opacity: 1; }
+.match-animation-area.animate .match-user.right { transform: translateX(50px); opacity: 1; }
+
+/* 中央のハート */
+.match-heart {
+    font-size: 50px;
+    color: #fff; /* ハートも白に */
+    z-index: 5;
+    opacity: 0;
+    transform: scale(0);
+    filter: none;
+}
+
+/* ハート出現アニメ */
+.match-animation-area.animate .match-heart {
+    animation: heartPopSimple 0.6s ease 0.6s forwards;
+}
+
+/* テキストボックス */
+.match-message-box {
+    background: transparent; /* 背景透明 */
+    box-shadow: none;
+    padding: 0;
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUpSimple 0.8s ease 1.2s forwards;
+}
+.match-message-box p { margin: 0; color: #fff; font-size: 20px; font-weight: 300; line-height: 1.5; }
+.match-message-box strong { color: #fff; font-weight: 700; font-size: 24px; }
+.match-sub-text { font-size: 14px !important; color: rgba(255,255,255,0.7) !important; margin-top: 15px !important; letter-spacing: 1px; }
+
+/* ボタン（白い枠線デザイン） */
+.match-action-btn {
+    background: transparent;
+    color: #fff;
+    border: 2px solid #fff;
+    padding: 15px 50px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: none;
+    opacity: 0;
+    letter-spacing: 2px;
+    animation: fadeInUpSimple 0.8s ease 1.6s forwards;
+    transition: all 0.3s ease;
+}
+.match-action-btn:hover, .match-action-btn:active {
+    background: #fff;
+    color: #D65A5A; /* 背景色と同じ色に反転 */
+}
+
+/* 紙吹雪は非表示 */
+.confetti { display: none; }
+
+/* シンプルなキーフレーム */
+@keyframes fadeInUpSimple {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes heartPopSimple {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+/* ▼▼▼ マッチング画面のロゴデザイン ▼▼▼ */
+.match-logo-container {
+    width: 80px;
+    height: 80px;
+    background-color: #fff;
+    border-radius: 50%;
+    margin: 0 auto 20px; /* 下に余白、中央寄せ */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    opacity: 0;
+    animation: fadeInUpSimple 0.8s ease 0.2s forwards; /* 少し遅れて出現 */
+}
+
+.match-logo {
+    width: 50px; /* ロゴサイズ調整 */
+    height: auto;
+}
+/* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+/* === 既存の修正: テキストボックスのデザイン === */
+.match-sub-text-box {
+    background: #fff;       /* 背景を白に */
+    color: #D65A5A;         /* 文字色を背景色と同じテラコッタに */
+    padding: 10px 25px;     /* 内側の余白 */
+    border-radius: 30px;    /* 角丸 */
+    display: inline-block;  /* 文字の長さに合わせる */
+    font-weight: 700;       /* 太字 */
+    font-size: 14px;
+    margin-top: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+/* 以前の .match-sub-text は削除または上書きしてください */
+
+
+/* === 追加: 心電図（ハートビート）ローダーのアニメーション === */
+#heartbeat-loader {
+    position: absolute;
+    width: 200px;
+    height: 60px;
+    z-index: 20;
+    display: none; /* JSで制御 */
+}
+
+.heartbeat-path {
+    fill: none;
+    stroke: #fff;          /* 白色の線 */
+    stroke-width: 3;
+    stroke-miterlimit: 10;
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    animation: flatline 2s infinite linear;
+}
+
+@keyframes flatline {
+    0% { stroke-dashoffset: 300; opacity: 0; }
+    10% { opacity: 1; }
+    90% { stroke-dashoffset: 0; opacity: 1; }
+    100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+/* 画像読み込み前はアイコンを隠しておく */
+.match-user {
+    opacity: 0; /* 初期状態は非表示 */
+}
+/* アニメーション用クラスがついたら表示 */
+.match-animation-area.animate .match-user {
+    /* opacityはtransformと一緒にtransitionで制御されます */
+}
+
+
+/* ▼▼▼ ヒミツの質問設定画面 (match-question) のリニューアルデザイン ▼▼▼ */
+
+/* 画面全体のコンテナ */
+.step-container {
+    padding: 20px 20px 100px; /* 下部にボタン用の余白 */
+    background-color: var(--bg-color-light);
+    min-height: 100vh;
+    box-sizing: border-box;
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* タイトルエリア */
+.step-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+    margin: 10px 0 10px;
+}
+
+.step-description {
+    font-size: 14px;
+    color: #888;
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+/* トピックリストのレイアウト */
+.topic-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* 各トピックのカード */
+.topic-wrapper {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: 1px solid transparent; /* 枠線のちらつき防止 */
+}
+
+/* 選択された時のカード全体 */
+.topic-wrapper.active {
+    box-shadow: 0 8px 20px rgba(236, 2, 126, 0.15); /* ピンクの影 */
+    border-color: rgba(236, 2, 126, 0.3);
+}
+
+/* トピックボタン本体 */
+.topic-btn {
+    width: 100%;
+    padding: 18px 20px;
+    background: white;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #555;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+/* 選択時・選択不可時のボタン装飾 */
+.topic-btn.selected {
+    color: var(--theme-color-pink); /* ピンク色 */
+    background: #fff; /* 背景は白のまま */
+}
+
+.topic-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f9f9f9;
+}
+
+/* チェックマークのデザイン */
+.check-mark {
+    width: 24px;
+    height: 24px;
+    background: var(--theme-color-pink);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+
+/* 質問入力エリア（スライドダウン） */
+.input-slide-down {
+    background: #fff5f8; /* 非常に薄いピンク背景 */
+    padding: 0 20px 20px;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); max-height: 0; }
+    to { opacity: 1; transform: translateY(0); max-height: 200px; }
+}
+
+.input-label {
+    font-size: 12px;
+    color: var(--theme-color-pink);
+    font-weight: bold;
+    margin: 0 0 8px;
+    display: block;
+}
+
+/* テキスト入力フォーム */
+.question-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ffcce0; /* 薄いピンクの枠線 */
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    background: white;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.question-input:focus {
+    border-color: var(--theme-color-pink);
+    box-shadow: 0 0 0 3px rgba(236, 2, 126, 0.1);
+}
+
+.question-input::placeholder {
+    color: #ccc;
+}
+
+/* 下部固定のアクションエリア */
+.action-area {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 15px 20px 30px; /* iPhoneの下部バー考慮 */
+    box-sizing: border-box;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+    z-index: 100;
+    text-align: center;
+}
+
+.alert-text {
+    color: var(--theme-color-pink);
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* 送信ボタン（決定ボタン） */
+.btn-submit {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, var(--theme-color-pink) 0%, var(--theme-color-purple) 100%);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(236, 2, 126, 0.3);
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.btn-submit:disabled {
+    background: #ccc;
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.btn-submit:active {
+    transform: scale(0.98);
+}
+/* ▲▲▲ ヒミツの質問設定画面 ここまで ▲▲▲ */
