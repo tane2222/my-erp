@@ -1,10 +1,22 @@
 const GAS_URL = "https://script.google.com/macros/s/AKfycbwVAuGEBmtwMyWtDDhnwGJG-Pno9kcPyybycGiXPJNp-AO6KtjxvfQVjkOjYgWkK0E2/exec"
 
-// LIFFの初期化（LIFF IDが必要な場合は後で追加）
+// あなたのLINEユーザーID（LINE Developersの「自分の利用者の識別子」などで確認できます）
+const OWNER_ID = "U7c1dce9de17d79f1bab98b9ad1604722"; 
+
 window.onload = function() {
     liff.init({ liffId: "2008812966-5qG4iaar" })
         .then(() => {
-            console.log("LIFF初期化完了");
+            if (!liff.isLoggedIn()) {
+                liff.login(); // ログインしていなければ強制ログイン
+                return;
+            }
+            const profile = liff.getContext();
+            // 自分のIDと一致しない場合は、アプリを停止させる
+            if (profile.userId !== OWNER_ID) {
+                document.body.innerHTML = "<h1>閲覧権限がありません</h1>";
+                return;
+            }
+            console.log("認証成功");
         });
 };
 
