@@ -1,73 +1,67 @@
-let currentLiffId = "";
-
-window.onload = async function() {
-    try {
-        const configRes = await fetch("/api/config");
-        const config = await configRes.json();
-        currentLiffId = config.liffId;
-
-        // 400エラー対策：二重初期化を防ぎつつ確実に初期化
-        if (!liff.id) {
-            await liff.init({ liffId: currentLiffId });
-        }
-
-        if (!liff.isLoggedIn()) {
-            liff.login({ redirectUri: window.location.href });
-            return;
-        }
-
-        const profile = liff.getContext();
-        const authRes = await fetch(`/api/config?userId=${profile.userId}`);
-        const auth = await authRes.json();
-
-        if (!auth.isOwner) {
-            document.body.innerHTML = "<h1>閲覧権限がありません</h1>";
-            return;
-        }
-    } catch (e) {
-        console.error("Init Error", e);
-    }
+// モードごとのメニュー定義
+const menus = {
+    life: [
+        { icon: 'wallet', name: '家計簿', link: 'index.html' },
+        { icon: 'key-round', name: 'パスワード', link: 'passwords.html' },
+        { icon: 'lightbulb', name: 'アイデア' },
+        { icon: 'calendar', name: '予定' },
+        { icon: 'shopping-cart', name: '買い物' },
+        { icon: 'music', name: '音楽' },
+        { icon: 'camera', name: '写真' },
+        { icon: 'heart', name: '健康' }
+    ],
+    work: [
+        { icon: 'briefcase', name: '仕事' },
+        { icon: 'trending-up', name: '転職' }, // 新規追加
+        { icon: 'layers', name: '案件管理' },
+        { icon: 'mail', name: 'メール' },
+        { icon: 'file-text', name: '経費精算' },
+        { icon: 'users', name: '連絡先' },
+        { icon: 'clock', name: '勤怠' },
+        { icon: 'terminal', name: '開発' }
+    ],
+    other: [
+        { icon: 'smile', name: 'その他' }, // 新規追加
+        { icon: 'dumbbell', name: '筋トレ' },
+        { icon: 'plane', name: '旅行' },
+        { icon: 'gamepad-2', name: '趣味' },
+        { icon: 'book-open', name: '読書' },
+        { icon: 'coffee', name: 'カフェ' },
+        { icon: 'car', name: 'ドライブ' },
+        { icon: 'gift', name: 'ほしい物' }
+    ]
 };
 
-async function sendData() {
-    const amount = document.getElementById('amount').value;
-    const category = document.getElementById('category').value;
-    const method = document.getElementById('method').value;
-
-    if (!amount) return alert("金額を入力してください");
-
-    const btn = document.getElementById('submit-btn');
-    btn.innerText = "保存中...";
-    btn.disabled = true;
-
-    try {
-        const response = await fetch("/api/save", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                action: "addExpense",
-                date: new Date().toLocaleDateString(),
-                amount: amount,
-                category: category,
-                paymentMethod: method,
-                memo: ""
-            })
-        });
-
-        const result = await response.json();
-        if (result.status === "success") {
-            alert("保存しました！");
-            document.getElementById('amount').value = "";
-        } else {
-            throw new Error(result.message);
-        }
-    } catch (e) {
-        console.error(e);
-        alert("エラーが発生しました: " + e.message);
-    } finally {
-        btn.innerText = "保存する";
-        btn.disabled = false;
-    }
+function switchMode(mode) {
+    // 1. bodyのクラスを切り替えて色を変える
+    document.body.className = `mode-${mode}`;
+    
+    // 2. メニューを生成
+    const grid = document.getElementById('menu-grid');
+    grid.innerHTML = ''; // 一旦空にする
+    
+    menus[mode].forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'app-item';
+        if(item.link) div.onclick = () => navigate(item.link);
+        
+        div.innerHTML = `
+            <div class="icon-box"><i data-lucide="${item.icon}"></i></div>
+            <span>${item.name}</span>
+        `;
+        grid.appendChild(div);
+    });
+    
+    // 3. アイコンを再レンダリング
+    lucide.createIcons();
 }
 
+function navigate(page) {
+    window.location.href = `${window.location.origin}/${page}`;
+}
 
+// 起動時にLIFEを表示
+window.onload = function() {
+    switchMode('life');
+    // 必要に応じてLIFFの初期化コードをここに追加
+};
