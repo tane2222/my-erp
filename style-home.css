@@ -91,7 +91,7 @@ body {
 /* 検索バー */
 .search-pill {
     position: absolute;
-    bottom: 140px; /* ドックの少し上 */
+    bottom: 210px; /* ドックの少し上 */
     background: rgba(255, 255, 255, 0.2);
     padding: 3px 12px;
     border-radius: 15px;
