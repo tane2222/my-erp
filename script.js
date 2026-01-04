@@ -1,24 +1,33 @@
-// あなたのLINEユーザーID（LINE Developersの「自分の利用者の識別子」などで確認できます）
-const OWNER_ID = "U7c1dce9de17d79f1bab98b9ad1604722"; 
+window.onload = async function() {
+    try {
+        // 1. まずはliffIdを取得するためにAPIを叩く
+        const configRes = await fetch("/api/config");
+        const config = await configRes.json();
 
-window.onload = function() {
-    liff.init({ liffId: "2008812966-5qG4iaar" })
-        .then(() => {
-            if (!liff.isLoggedIn()) {
-                liff.login(); // ログインしていなければ強制ログイン
-                return;
-            }
-            const profile = liff.getContext();
-            // 自分のIDと一致しない場合は、アプリを停止させる
-            if (profile.userId !== OWNER_ID) {
-                document.body.innerHTML = "<h1>閲覧権限がありません</h1>";
-                return;
-            }
-            console.log("認証成功");
-        });
+        // 2. LIFFの初期化
+        await liff.init({ liffId: config.liffId });
+
+        if (!liff.isLoggedIn()) {
+            liff.login();
+            return;
+        }
+
+        // 3. ログインできたら、自分のIDが本人かAPIに確認する
+        const profile = liff.getContext();
+        const authRes = await fetch(`/api/config?userId=${profile.userId}`);
+        const auth = await authRes.json();
+
+        if (!auth.isOwner) {
+            document.body.innerHTML = "<h1>閲覧権限がありません</h1>";
+            return;
+        }
+
+        console.log("認証成功：個人ERPへようこそ");
+    } catch (e) {
+        console.error("起動エラー:", e);
+        document.body.innerHTML = "<h1>システム起動エラー</h1>";
+    }
 };
-
-// 【重要】GAS_URLやapiKeyの記述はすべて削除します！
 
 async function sendData() {
     const amount = document.getElementById('amount').value;
@@ -32,9 +41,9 @@ async function sendData() {
     btn.disabled = true;
 
     try {
-        // GAS_URLではなく、自分のサイト内の "/api/save" を叩く
         const response = await fetch("/api/save", {
             method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 action: "addExpense",
                 date: new Date().toLocaleDateString(),
