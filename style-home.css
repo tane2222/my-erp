@@ -101,22 +101,48 @@ body {
     gap: 4px;
 }
 
-/* 下部ドック：4アイコン */
-.dock-container {
-    position: absolute;
-    bottom: 40px;
-    width: 90%;
-}
+/* style-home.css の下部（.dock-container以降）を以下に差し替え */
 
-.dock {
-    background: var(--dock-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 28px;
-    padding: 18px 10px;
+/* ナビゲーションドック（共通デザイン） */
+.dock-container {
+    position: fixed; /* absoluteから固定表示に変更 */
+    bottom: 30px;
+    width: 90%;
+    max-width: 360px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 25px;
+    padding: 12px;
     display: flex;
     justify-content: space-around;
     align-items: center;
+    z-index: 100;
 }
 
-.dock-item i { width: 26px; height: 26px; color: white; opacity: 0.9; }
+.dock-item {
+    background: none;
+    border: none;
+    padding: 10px;
+    color: white;
+    font-size: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: auto;
+    cursor: pointer;
+}
+
+.dock-item i { width: 22px; height: 22px; }
+
+/* Homeがアクティブな状態 */
+.dock-item.active {
+    opacity: 1;
+    font-weight: bold;
+}
+
+/* 他のアイテムは少し透過させる */
+.dock-item:not(.active) {
+    opacity: 0.5;
+}
