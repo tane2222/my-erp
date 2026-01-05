@@ -3,47 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>支出管理 - Sakura</title>
+    <title>Personal ERP</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
-<body>
-    <div id="app">
-        <h1>SPENDING</h1>
-        
-        <div class="glass-card">
-            <div class="form-group">
-                <label>AMOUNT</label>
-                <input type="number" id="amount" placeholder="0" inputmode="numeric">
+<body class="mode-life"> 
+
+    <div id="page-home" class="page-section">
+        <div class="iphone-container">
+            <header class="mode-header">
+                <div class="mode-circle" onclick="switchMode('work')" id="btn-work">WORK</div>
+                <div class="mode-circle" onclick="switchMode('life')" id="btn-life">LIFE</div>
+                <div class="mode-circle" onclick="switchMode('other')" id="btn-other">OTHER</div>
+            </header>
+
+            <div class="widget-section">
+                <div class="date-text" id="current-year-month">2026 JAN</div>
+                <div class="weather-row">
+                    <i data-lucide="cloud-sun"></i>
+                    <span id="weather-city">TOKYO 10°C</span>
+                </div>
+                <p class="battery">BATTERIE @ 80%</p>
             </div>
-            <div class="form-group">
-                <label>CATEGORY</label>
-                <select id="category">
-                    <option>食費</option><option>日用品</option><option>娯楽</option><option>自己研鑽</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>PAYMENT</label>
-                <select id="method">
-                    <option>クレジットカードA</option><option>Amazon Pay</option><option>現金</option>
-                </select>
-            </div>
-            <button onclick="sendData()" id="submit-btn">SAVE</button>
+
+            <main class="app-grid" id="menu-grid">
+                </main>
+
+            <div class="search-pill"><i data-lucide="search" style="width:12px;"></i> 検索</div>
         </div>
-        <div class="dock-container">
-    <button class="dock-item" onclick="location.href='home.html'">
-        <i data-lucide="home"></i><span>Home</span>
-    </button>
-    <button class="dock-item" onclick="location.href='memo.html'">
-        <i data-lucide="sticky-note"></i><span>Memo</span>
-    </button>
-    <button class="dock-item" onclick="location.href='passwords.html'">
-        <i data-lucide="key-round"></i><span>Passwords</span>
-    </button>
-</div>
     </div>
+
+    <div id="page-spending" class="page-section hidden">
+        <div class="app-container">
+            <h1>SPENDING</h1>
+            <div class="glass-card">
+                <div class="form-group">
+                    <label>AMOUNT</label>
+                    <input type="number" id="amount" placeholder="0" inputmode="numeric">
+                </div>
+                <div class="form-group">
+                    <label>CATEGORY</label>
+                    <select id="category">
+                        <option>食費</option><option>日用品</option><option>娯楽</option><option>自己研鑽</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>PAYMENT</label>
+                    <select id="method">
+                        <option>クレジットカードA</option><option>Amazon Pay</option><option>現金</option>
+                    </select>
+                </div>
+                <button onclick="sendSpendingData()" id="submit-btn">SAVE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-memo" class="page-section hidden">
+        <div class="app-container">
+            <h1>MEMO</h1>
+            <div class="glass-card">
+                <label>NEW MEMO</label>
+                <textarea id="memo-input" rows="3" placeholder="何かメモを残す..." 
+                    style="width:100%; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); border-radius:12px; color:white; padding:10px; box-sizing:border-box;"></textarea>
+                <button onclick="saveMemo()" id="memo-save-btn" style="margin-top:10px;">SAVE</button>
+            </div>
+            <div id="memo-list">
+                </div>
+        </div>
+    </div>
+
+    <div id="page-passwords" class="page-section hidden">
+        <div class="app-container">
+            <h1>PASSWORDS</h1>
+            <div class="glass-card" style="border: 1px solid rgba(255, 230, 0, 0.4);">
+                <label>MASTER KEY</label>
+                <input type="password" id="master-key" placeholder="解除用の鍵を入力">
+            </div>
+            <div class="glass-card">
+                <div class="form-group"><input type="text" id="service" placeholder="Service Name"></div>
+                <div class="form-group"><input type="text" id="loginId" placeholder="ID / Mail"></div>
+                <div class="form-group"><input type="password" id="pass" placeholder="Password"></div>
+                <button onclick="savePassword()" id="pass-save-btn">ENCRYPT & SAVE</button>
+            </div>
+            <button onclick="loadPasswords()" style="margin-bottom:20px;">FETCH LIST</button>
+            <div id="password-list"></div>
+        </div>
+    </div>
+
+    <div class="dock-container">
+        <button class="dock-item active" id="dock-home" onclick="showPage('home')">
+            <i data-lucide="home"></i><span>Home</span>
+        </button>
+        <button class="dock-item" id="dock-memo" onclick="showPage('memo')">
+            <i data-lucide="sticky-note"></i><span>Memo</span>
+        </button>
+        <button class="dock-item" id="dock-passwords" onclick="showPage('passwords')">
+            <i data-lucide="key-round"></i><span>Passwords</span>
+        </button>
+    </div>
+
     <script src="script.js"></script>
-    <script>lucide.createIcons();</script>
 </body>
 </html>
