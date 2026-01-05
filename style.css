@@ -1,6 +1,8 @@
-/* 全画面共通のデザイン */
+/* --- 共通設定 --- */
 :root {
-    --bg-color: #d47a81; /* 桜色 */
+    --color-life: #d47a81; /* 桜色 */
+    --color-work: #7a98d4; /* 薄藍 */
+    --color-other: #8ab47a; /* 萌黄 */
     --glass-bg: rgba(255, 255, 255, 0.2);
     --glass-border: rgba(255, 255, 255, 0.3);
     --text-color: #ffffff;
@@ -8,109 +10,115 @@
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    background-color: var(--bg-color);
+    margin: 0; padding: 0;
+    transition: background-color 0.5s ease;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     color: var(--text-color);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    background-color: var(--color-life); /* 初期色 */
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
-#app {
+/* モード別の背景色 */
+body.mode-life { background-color: var(--color-life); }
+body.mode-work { background-color: var(--color-work); }
+body.mode-other { background-color: var(--color-other); }
+
+/* 表示切り替え用 */
+.hidden { display: none !important; }
+
+/* ページセクション */
+.page-section {
     width: 100%;
-    max-width: 400px;
-    padding: 40px 20px 120px 20px; /* 下部ドック分の余白 */
+    min-height: 100vh;
+    padding-bottom: 100px; /* ドックの分 */
     box-sizing: border-box;
 }
 
-h1 {
-    text-align: center;
-    font-weight: 300;
-    letter-spacing: 2px;
-    margin-bottom: 30px;
+/* --- ホーム画面のデザイン --- */
+.iphone-container {
+    width: 100%; max-width: 400px; margin: 0 auto;
+    display: flex; flex-direction: column; align-items: center; padding-top: 40px;
 }
 
-/* 入力エリアのガラスデザイン */
+.mode-header { display: flex; gap: 15px; margin-bottom: 30px; }
+.mode-circle {
+    width: 75px; height: 75px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: bold; cursor: pointer;
+    transition: all 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+/* 選択中のサークル強調 */
+body.mode-life #btn-life, body.mode-work #btn-work, body.mode-other #btn-other {
+    background: rgba(255, 255, 255, 0.9); color: #333;
+}
+
+.widget-section { text-align: center; margin-bottom: 30px; }
+.date-text { font-size: 1rem; letter-spacing: 2px; margin-top: 10px; opacity: 0.9; }
+.weather-row { display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 0.8rem; margin-top: 5px; }
+.battery { font-size: 0.7rem; margin-top: 15px; opacity: 0.7; }
+
+.app-grid { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: 15px; row-gap: 25px; width: 90%; margin-top: 20px; }
+.app-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+.icon-box {
+    width: 50px; height: 50px; background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; margin-bottom: 6px;
+}
+.app-item span { font-size: 0.6rem; opacity: 0.9; text-align: center; white-space: nowrap; }
+
+.search-pill { margin-top: 40px; background: rgba(255, 255, 255, 0.2); padding: 4px 15px; border-radius: 20px; font-size: 0.7rem; display: flex; align-items: center; gap: 5px; }
+
+/* --- 各アプリ画面（家計簿・メモ・パスワード）のデザイン --- */
+.app-container {
+    width: 100%; max-width: 400px; margin: 0 auto;
+    padding: 40px 20px; box-sizing: border-box;
+}
+
+h1 { text-align: center; font-weight: 300; letter-spacing: 2px; margin-bottom: 30px; }
+
 .glass-card {
     background: var(--glass-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    padding: 20px;
-    margin-bottom: 20px;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border); border-radius: 20px;
+    padding: 20px; margin-bottom: 20px;
 }
 
 .form-group { margin-bottom: 15px; }
-
-label {
-    display: block;
-    font-size: 0.75rem;
-    margin-bottom: 8px;
-    opacity: 0.9;
-}
-
-input, select {
-    width: 100%;
-    padding: 12px;
+label { display: block; font-size: 0.75rem; margin-bottom: 8px; opacity: 0.9; }
+input, select, textarea {
+    width: 100%; padding: 12px;
     background: rgba(255, 255, 255, 0.1);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
-    color: white;
-    font-size: 1rem;
-    outline: none;
-    box-sizing: border-box;
+    border: 1px solid var(--glass-border); border-radius: 12px;
+    color: white; font-size: 1rem; outline: none; box-sizing: border-box;
 }
+input::placeholder, textarea::placeholder { color: rgba(255, 255, 255, 0.5); }
 
-input::placeholder { color: rgba(255, 255, 255, 0.5); }
-
-/* ボタンのデザイン */
 button {
-    width: 100%;
-    padding: 15px;
+    width: 100%; padding: 15px;
     background: rgba(255, 255, 255, 0.3);
-    border: 1px solid var(--glass-border);
-    border-radius: 15px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s;
+    border: 1px solid var(--glass-border); border-radius: 15px;
+    color: white; font-weight: bold; cursor: pointer; transition: background 0.3s;
 }
-
 button:active { background: rgba(255, 255, 255, 0.5); }
 
-/* 下部ドック（ナビゲーション） */
+/* --- フッタードック --- */
 .dock-container {
-    position: fixed;
-    bottom: 30px;
-    width: 90%;
-    max-width: 360px;
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    width: 90%; max-width: 360px;
     background: var(--dock-bg);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border-radius: 25px;
-    padding: 12px;
-    display: flex;
-    justify-content: space-around;
-    z-index: 100;
+    backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+    border-radius: 25px; padding: 12px;
+    display: flex; justify-content: space-around; align-items: center; z-index: 100;
 }
-
 .dock-item {
-    background: none;
-    border: none;
-    padding: 10px;
-    color: white;
-    font-size: 0.6rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    width: auto;
+    background: none; border: none; padding: 10px; color: white;
+    font-size: 0.6rem; display: flex; flex-direction: column; align-items: center;
+    gap: 4px; width: auto; cursor: pointer;
 }
-
 .dock-item i { width: 22px; height: 22px; }
 .dock-item.active { opacity: 1; font-weight: bold; }
 .dock-item:not(.active) { opacity: 0.5; }
