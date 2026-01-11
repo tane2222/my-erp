@@ -350,7 +350,7 @@ function filterPasswords() {
     renderPasswordList(filtered);
 }
 
-// リスト描画関数 (New!)
+// リスト描画関数 (更新版: アコーディオンUI)
 function renderPasswordList(listData) {
     const listDiv = document.getElementById('password-list');
     const masterKey = document.getElementById('master-key').value;
@@ -361,42 +361,85 @@ function renderPasswordList(listData) {
         return;
     }
 
-    listData.forEach(item => {
+    listData.forEach((item, index) => {
+        // HTML上のIDを一意にする
+        const detailId = `pass-detail-${index}`;
         const rawPass = String(item.pass);
+        
         let displayPass = "";
         let actionHtml = "";
+        let lockIcon = "lock"; // 通常アイコン
 
-        // 暗号化チェック
+        // 更新日の整形
+        let updatedDate = "-";
+        if (item.updated) {
+            try {
+                updatedDate = new Date(item.updated).toLocaleDateString('ja-JP');
+            } catch(e) {}
+        }
+
+        // 暗号化チェック & 復号
         if (rawPass.startsWith('U2FsdGVkX1')) {
-            // 暗号化済み -> 復号
             try {
                 const bytes = CryptoJS.AES.decrypt(rawPass, masterKey);
                 const decrypted = bytes.toString(CryptoJS.enc.Utf8);
                 displayPass = decrypted ? decrypted : "❌ 鍵違い";
             } catch (e) { displayPass = "❌ 復号エラー"; }
         } else {
-            // 未暗号化 -> 暗号化ボタン表示
-            displayPass = `<span style="color:#ffcc00;">⚠️ ${rawPass} (未暗号化)</span>`;
-            // originalIndexを使うことで、検索絞り込み中でも正しい行を更新できる
+            // 未暗号化の場合
+            displayPass = `<span style="color:#ffcc00;">${rawPass}</span> <span style="font-size:0.7rem;">(未暗号化)</span>`;
+            lockIcon = "unlock"; // 未ロックアイコン
+            
+            // 暗号化ボタン (クリック時にアコーディオン開閉を邪魔しないよう stopPropagation する)
             actionHtml = `
-                <button onclick="encryptLegacyPassword(${item.originalIndex}, '${rawPass}')" 
-                    style="margin-top:5px; padding:5px 10px; font-size:0.8rem; background:rgba(255,200,0,0.3); border:1px solid #ffcc00;">
-                    🔒 暗号化する
+                <button onclick="event.stopPropagation(); encryptLegacyPassword(${item.originalIndex}, '${rawPass}')" 
+                    style="margin-top:5px; padding:10px; width:100%; font-size:0.85rem; background:rgba(255,200,0,0.15); border:1px solid #ffcc00; color:#ffcc00;">
+                    🔒 暗号化して上書き保存
                 </button>`;
         }
 
+        // HTML生成 (ヘッダー + 詳細エリア)
         listDiv.innerHTML += `
-            <div style="border-bottom:1px solid rgba(255,255,255,0.2); padding:10px;">
-                <strong>${item.service}</strong><br>
-                <span style="font-size:0.8rem; opacity:0.8;">ID: ${item.id}</span><br>
-                PASS: <code style="background:rgba(0,0,0,0.2); padding:2px 5px; border-radius:4px; user-select:all;">${displayPass}</code>
-                ${actionHtml}
+            <div class="pass-item" onclick="togglePassDetail('${detailId}')">
+                <div class="pass-header">
+                    <div>
+                        <strong style="font-size:1.1rem; display:block; margin-bottom:4px;">${item.service}</strong>
+                        <span style="font-size:0.8rem; opacity:0.8;"><i data-lucide="user" style="width:12px; vertical-align:middle;"></i> ${item.id}</span>
+                    </div>
+                    <i data-lucide="chevron-down" style="opacity:0.5; width:20px;"></i>
+                </div>
+                
+                <div id="${detailId}" class="pass-detail">
+                    <span class="pass-label">PASSWORD</span>
+                    <div class="pass-value">
+                        <code style="background:rgba(0,0,0,0.3); padding:6px 10px; border-radius:6px; font-size:1.1rem; user-select:all;">${displayPass}</code>
+                    </div>
+
+                    <span class="pass-label">MEMO</span>
+                    <div class="pass-value" style="white-space: pre-wrap;">${item.memo || "(なし)"}</div>
+
+                    <span class="pass-label">UPDATED</span>
+                    <div class="pass-value">${updatedDate}</div>
+
+                    ${actionHtml}
+                </div>
             </div>
         `;
     });
     
-    // アイコン再描画（検索アイコンなど）
     if(window.lucide) lucide.createIcons();
+}
+
+// アコーディオン開閉関数 (New!)
+function togglePassDetail(id) {
+    const el = document.getElementById(id);
+    // 他の開いている詳細を閉じる（スッキリさせたい場合）
+    document.querySelectorAll('.pass-detail.open').forEach(opened => {
+        if(opened.id !== id) opened.classList.remove('open');
+    });
+
+    // クラスを付け外しして表示切り替え
+    el.classList.toggle('open');
 }
 
 // 暗号化更新処理 (前回のまま)
