@@ -196,6 +196,7 @@ async function saveMemo() {
 }
 
 // メモ一覧取得（削除ボタン付きに更新）
+// メモ一覧取得（時間をタイムスタンプから生成するように修正）
 async function loadMemos() {
     try {
         const response = await fetch("/api/save", {
@@ -209,14 +210,24 @@ async function loadMemos() {
 
         if(result.data && result.data.length > 0) {
             result.data.forEach(row => {
-                // row[0] はタイムスタンプ。削除時のIDとして使う
-                const timestamp = row[0]; 
+                // row[0] はタイムスタンプ
+                const rawDate = row[0]; 
                 
+                // タイムスタンプを「2026/01/11 15:30」のような形式に変換
+                const dateObj = new Date(rawDate);
+                const dateStr = dateObj.toLocaleString('ja-JP', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
                 listDiv.innerHTML += `
                     <div class="glass-card" style="margin-bottom:10px; padding:15px; position: relative;">
                         <div style="font-size:0.6rem; opacity:0.6; margin-bottom:5px; display:flex; justify-content:space-between;">
-                            <span>${row[2]}</span>
-                            <button onclick="deleteMemo('${timestamp}')" class="delete-btn">
+                            <span>${dateStr}</span>
+                            <button onclick="deleteMemo('${rawDate}')" class="delete-btn">
                                 <i data-lucide="trash-2" style="width:14px; height:14px;"></i>
                             </button>
                         </div>
@@ -226,7 +237,7 @@ async function loadMemos() {
                     </div>
                 `;
             });
-            lucide.createIcons(); // 削除アイコンを描画
+            lucide.createIcons();
         } else {
             listDiv.innerHTML = `<p style="text-align:center; opacity:0.5; font-size:0.8rem;">メモはありません</p>`;
         }
