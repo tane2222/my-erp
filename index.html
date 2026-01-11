@@ -88,6 +88,10 @@
                 <button onclick="savePassword()" id="pass-save-btn">ENCRYPT & SAVE</button>
             </div>
             <button onclick="loadPasswords()" style="margin-bottom:20px;">FETCH LIST</button>
+        <div class="form-group" style="position:relative; margin-bottom:15px;">
+            <i data-lucide="search" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:0.6; width:18px;"></i>
+            <input type="text" id="pass-search" placeholder="サービス名やIDで検索..." oninput="filterPasswords()" 
+                style="padding-left: 40px;"> </div>
             <div id="password-list"></div>
         </div>
     </div>
