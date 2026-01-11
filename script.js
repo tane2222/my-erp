@@ -298,9 +298,13 @@ async function savePassword() {
     }
 }
 
+// パスワード一覧取得（データ取得と表示を分離）
 async function loadPasswords() {
     const masterKey = document.getElementById('master-key').value;
     if (!masterKey) return alert("復号のためにマスターパスワードを入力してください");
+
+    const btn = document.querySelector('button[onclick="loadPasswords()"]');
+    if(btn) { btn.innerText = "LOADING..."; btn.disabled = true; }
 
     try {
         const response = await fetch("/api/save", {
@@ -309,57 +313,100 @@ async function loadPasswords() {
             body: JSON.stringify({ action: "getPasswords" })
         });
         const result = await response.json();
-        const listDiv = document.getElementById('password-list');
-        listDiv.innerHTML = "";
+        
+        // データを加工して保存（検索しても行番号がずれないようにoriginalIndexを持たせる）
+        allPasswordsData = result.data.map((row, index) => ({
+            originalIndex: index, // スプレッドシート上の行番号用
+            service: row[0],
+            id: row[1],
+            pass: row[2], // 暗号文 or 平文
+            memo: row[3],
+            updated: row[4]
+        }));
 
-        // 行インデックス(index)を使って更新対象を特定する
-        result.data.forEach((row, index) => {
-            const rawPass = String(row[2]); // スプレッドシートの生のパスワード
-            let displayPass = "";
-            let actionHtml = "";
+        // 検索ボックスをクリアして全表示
+        document.getElementById('pass-search').value = "";
+        renderPasswordList(allPasswordsData);
 
-            // 暗号化されているかチェック (CryptoJSの暗号文は "U2FsdGVkX1" で始まる)
-            if (rawPass.startsWith('U2FsdGVkX1')) {
-                // ■ 暗号化済みの場合 -> 復号して表示
-                try {
-                    const bytes = CryptoJS.AES.decrypt(rawPass, masterKey);
-                    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-                    displayPass = decrypted ? decrypted : "❌ 鍵違い";
-                } catch (e) { 
-                    displayPass = "❌ 復号エラー"; 
-                }
-            } else {
-                // ■ 未暗号化（平文）の場合 -> そのまま表示 ＋ 暗号化ボタン
-                displayPass = `<span style="color:#ffcc00;">⚠️ ${rawPass} (未暗号化)</span>`;
-                actionHtml = `
-                    <button onclick="encryptLegacyPassword(${index}, '${rawPass}')" 
-                        style="margin-top:5px; padding:5px 10px; font-size:0.8rem; background:rgba(255,200,0,0.3); border:1px solid #ffcc00;">
-                        🔒 暗号化する
-                    </button>`;
-            }
-
-            listDiv.innerHTML += `
-                <div style="border-bottom:1px solid rgba(255,255,255,0.2); padding:10px;">
-                    <strong>${row[0]}</strong><br>
-                    <span style="font-size:0.8rem; opacity:0.8;">ID: ${row[1]}</span><br>
-                    PASS: <code style="background:rgba(0,0,0,0.2); padding:2px 5px; border-radius:4px;">${displayPass}</code>
-                    ${actionHtml}
-                </div>
-            `;
-        });
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+        console.error(e); 
+        alert("読み込みに失敗しました");
+    } finally {
+        if(btn) { btn.innerText = "FETCH LIST"; btn.disabled = false; }
+    }
 }
 
-// 既存の平文パスワードを暗号化して更新する関数 (New!)
+// 検索フィルター機能 (New!)
+function filterPasswords() {
+    const keyword = document.getElementById('pass-search').value.toLowerCase();
+    
+    // サービス名 または ID にキーワードが含まれるものを抽出
+    const filtered = allPasswordsData.filter(item => {
+        const s = String(item.service).toLowerCase();
+        const i = String(item.id).toLowerCase();
+        return s.includes(keyword) || i.includes(keyword);
+    });
+
+    renderPasswordList(filtered);
+}
+
+// リスト描画関数 (New!)
+function renderPasswordList(listData) {
+    const listDiv = document.getElementById('password-list');
+    const masterKey = document.getElementById('master-key').value;
+    listDiv.innerHTML = "";
+
+    if (listData.length === 0) {
+        listDiv.innerHTML = `<p style="text-align:center; opacity:0.6;">見つかりません</p>`;
+        return;
+    }
+
+    listData.forEach(item => {
+        const rawPass = String(item.pass);
+        let displayPass = "";
+        let actionHtml = "";
+
+        // 暗号化チェック
+        if (rawPass.startsWith('U2FsdGVkX1')) {
+            // 暗号化済み -> 復号
+            try {
+                const bytes = CryptoJS.AES.decrypt(rawPass, masterKey);
+                const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+                displayPass = decrypted ? decrypted : "❌ 鍵違い";
+            } catch (e) { displayPass = "❌ 復号エラー"; }
+        } else {
+            // 未暗号化 -> 暗号化ボタン表示
+            displayPass = `<span style="color:#ffcc00;">⚠️ ${rawPass} (未暗号化)</span>`;
+            // originalIndexを使うことで、検索絞り込み中でも正しい行を更新できる
+            actionHtml = `
+                <button onclick="encryptLegacyPassword(${item.originalIndex}, '${rawPass}')" 
+                    style="margin-top:5px; padding:5px 10px; font-size:0.8rem; background:rgba(255,200,0,0.3); border:1px solid #ffcc00;">
+                    🔒 暗号化する
+                </button>`;
+        }
+
+        listDiv.innerHTML += `
+            <div style="border-bottom:1px solid rgba(255,255,255,0.2); padding:10px;">
+                <strong>${item.service}</strong><br>
+                <span style="font-size:0.8rem; opacity:0.8;">ID: ${item.id}</span><br>
+                PASS: <code style="background:rgba(0,0,0,0.2); padding:2px 5px; border-radius:4px; user-select:all;">${displayPass}</code>
+                ${actionHtml}
+            </div>
+        `;
+    });
+    
+    // アイコン再描画（検索アイコンなど）
+    if(window.lucide) lucide.createIcons();
+}
+
+// 暗号化更新処理 (前回のまま)
 async function encryptLegacyPassword(rowIndex, plainPass) {
+    // ... (前回のencryptLegacyPasswordの中身と同じです) ...
     const masterKey = document.getElementById('master-key').value;
     if (!masterKey) return alert("マスターパスワードが必要です");
     if (!confirm(`「${plainPass}」を現在のマスターキーで暗号化して上書きしますか？`)) return;
 
-    // 暗号化
     const encrypted = CryptoJS.AES.encrypt(plainPass, masterKey).toString();
-
-    // 更新処理中の表示
     const btns = document.querySelectorAll('button');
     btns.forEach(b => b.disabled = true);
 
@@ -369,7 +416,7 @@ async function encryptLegacyPassword(rowIndex, plainPass) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 action: "updatePassword",
-                row: rowIndex, // 何行目を更新するか
+                row: rowIndex, 
                 encryptedPass: encrypted
             })
         });
@@ -377,7 +424,7 @@ async function encryptLegacyPassword(rowIndex, plainPass) {
         const result = await response.json();
         if (result.status === "success") {
             alert("暗号化して更新しました！");
-            loadPasswords(); // リスト再読み込み
+            loadPasswords(); // 再読み込み
         } else {
             alert("更新エラー: " + result.message);
         }
