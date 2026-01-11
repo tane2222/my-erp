@@ -350,7 +350,7 @@ function filterPasswords() {
     renderPasswordList(filtered);
 }
 
-// リスト描画関数 (更新版: アコーディオンUI)
+// リスト描画関数 (編集機能付き)
 function renderPasswordList(listData) {
     const listDiv = document.getElementById('password-list');
     const masterKey = document.getElementById('master-key').value;
@@ -362,66 +362,90 @@ function renderPasswordList(listData) {
     }
 
     listData.forEach((item, index) => {
-        // HTML上のIDを一意にする
+        // IDを一意にする
         const detailId = `pass-detail-${index}`;
-        const rawPass = String(item.pass);
+        const viewId = `pass-view-${index}`;
+        const editId = `pass-edit-${index}`;
         
-        let displayPass = "";
-        let actionHtml = "";
-        let lockIcon = "lock"; // 通常アイコン
-
+        const rawPass = String(item.pass);
+        let decryptedPass = ""; // 復号後のパスワード（編集フォーム初期値用）
+        let displayPassHtml = "";
+        
         // 更新日の整形
         let updatedDate = "-";
         if (item.updated) {
-            try {
-                updatedDate = new Date(item.updated).toLocaleDateString('ja-JP');
-            } catch(e) {}
+            try { updatedDate = new Date(item.updated).toLocaleDateString('ja-JP'); } catch(e) {}
         }
 
-        // 暗号化チェック & 復号
+        // 復号処理
         if (rawPass.startsWith('U2FsdGVkX1')) {
             try {
                 const bytes = CryptoJS.AES.decrypt(rawPass, masterKey);
-                const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-                displayPass = decrypted ? decrypted : "❌ 鍵違い";
-            } catch (e) { displayPass = "❌ 復号エラー"; }
+                const val = bytes.toString(CryptoJS.enc.Utf8);
+                decryptedPass = val ? val : ""; // 編集用に保持
+                displayPassHtml = val ? val : "❌ 鍵違い";
+            } catch (e) { displayPassHtml = "❌ 復号エラー"; }
         } else {
-            // 未暗号化の場合
-            displayPass = `<span style="color:#ffcc00;">${rawPass}</span> <span style="font-size:0.7rem;">(未暗号化)</span>`;
-            lockIcon = "unlock"; // 未ロックアイコン
-            
-            // 暗号化ボタン (クリック時にアコーディオン開閉を邪魔しないよう stopPropagation する)
-            actionHtml = `
-                <button onclick="event.stopPropagation(); encryptLegacyPassword(${item.originalIndex}, '${rawPass}')" 
-                    style="margin-top:5px; padding:10px; width:100%; font-size:0.85rem; background:rgba(255,200,0,0.15); border:1px solid #ffcc00; color:#ffcc00;">
-                    🔒 暗号化して上書き保存
-                </button>`;
+            decryptedPass = rawPass; // 未暗号化ならそのまま
+            displayPassHtml = `<span style="color:#ffcc00;">${rawPass}</span> <span style="font-size:0.7rem;">(未暗号化)</span>`;
         }
 
-        // HTML生成 (ヘッダー + 詳細エリア)
+        // HTML生成
         listDiv.innerHTML += `
             <div class="pass-item" onclick="togglePassDetail('${detailId}')">
                 <div class="pass-header">
                     <div>
-                        <strong style="font-size:1.1rem; display:block; margin-bottom:4px;">${item.service}</strong>
+                        <strong id="title-${index}" style="font-size:1.1rem; display:block; margin-bottom:4px;">${item.service}</strong>
                         <span style="font-size:0.8rem; opacity:0.8;"><i data-lucide="user" style="width:12px; vertical-align:middle;"></i> ${item.id}</span>
                     </div>
                     <i data-lucide="chevron-down" style="opacity:0.5; width:20px;"></i>
                 </div>
                 
                 <div id="${detailId}" class="pass-detail">
-                    <span class="pass-label">PASSWORD</span>
-                    <div class="pass-value">
-                        <code style="background:rgba(0,0,0,0.3); padding:6px 10px; border-radius:6px; font-size:1.1rem; user-select:all;">${displayPass}</code>
+                    <div id="${viewId}">
+                        <span class="pass-label">PASSWORD</span>
+                        <div class="pass-value">
+                            <code style="background:rgba(0,0,0,0.3); padding:6px 10px; border-radius:6px; font-size:1.1rem; user-select:all;">${displayPassHtml}</code>
+                        </div>
+
+                        <span class="pass-label">MEMO</span>
+                        <div class="pass-value" style="white-space: pre-wrap;">${item.memo || "(なし)"}</div>
+
+                        <div style="display:flex; justify-content:space-between; align-items:end;">
+                            <div>
+                                <span class="pass-label">UPDATED</span>
+                                <div class="pass-value" style="margin-bottom:0;">${updatedDate}</div>
+                            </div>
+                            <button onclick="event.stopPropagation(); enableEdit('${index}')" 
+                                style="width:auto; padding:8px 15px; font-size:0.8rem; background:rgba(255,255,255,0.2);">
+                                ✏️ 編集
+                            </button>
+                        </div>
                     </div>
 
-                    <span class="pass-label">MEMO</span>
-                    <div class="pass-value" style="white-space: pre-wrap;">${item.memo || "(なし)"}</div>
-
-                    <span class="pass-label">UPDATED</span>
-                    <div class="pass-value">${updatedDate}</div>
-
-                    ${actionHtml}
+                    <div id="${editId}" class="hidden" onclick="event.stopPropagation();">
+                        <div class="form-group">
+                            <label>Service Name</label>
+                            <input type="text" id="edit-service-${index}" value="${item.service}">
+                        </div>
+                        <div class="form-group">
+                            <label>ID / Mail</label>
+                            <input type="text" id="edit-id-${index}" value="${item.id}">
+                        </div>
+                        <div class="form-group">
+                            <label>Password (変更する場合のみ入力)</label>
+                            <input type="text" id="edit-pass-${index}" value="${decryptedPass}" placeholder="パスワード">
+                        </div>
+                        <div class="form-group">
+                            <label>Memo</label>
+                            <textarea id="edit-memo-${index}" rows="2" 
+                                style="width:100%; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); border-radius:12px; color:white; padding:10px;">${item.memo}</textarea>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button onclick="cancelEdit('${index}');" style="background:rgba(255,255,255,0.1);">キャンセル</button>
+                            <button onclick="updatePasswordEntry('${index}', ${item.originalIndex})" style="background:rgba(0,255,100,0.3); border-color:#0f0;">保存</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -430,16 +454,79 @@ function renderPasswordList(listData) {
     if(window.lucide) lucide.createIcons();
 }
 
-// アコーディオン開閉関数 (New!)
+// アコーディオン開閉
 function togglePassDetail(id) {
     const el = document.getElementById(id);
-    // 他の開いている詳細を閉じる（スッキリさせたい場合）
+    // 編集モード中に閉じようとした場合は何もしない（誤操作防止）
+    if(el.querySelector('.hidden') === null) return; 
+    
     document.querySelectorAll('.pass-detail.open').forEach(opened => {
         if(opened.id !== id) opened.classList.remove('open');
     });
-
-    // クラスを付け外しして表示切り替え
     el.classList.toggle('open');
+}
+
+// 編集モード開始
+function enableEdit(index) {
+    document.getElementById(`pass-view-${index}`).classList.add('hidden');
+    document.getElementById(`pass-edit-${index}`).classList.remove('hidden');
+}
+
+// 編集キャンセル
+function cancelEdit(index) {
+    document.getElementById(`pass-edit-${index}`).classList.add('hidden');
+    document.getElementById(`pass-view-${index}`).classList.remove('hidden');
+}
+
+// 編集保存処理 (New!)
+async function updatePasswordEntry(localIndex, originalRowIndex) {
+    const masterKey = document.getElementById('master-key').value;
+    if (!masterKey) return alert("マスターパスワードが必要です");
+
+    const newService = document.getElementById(`edit-service-${localIndex}`).value;
+    const newId = document.getElementById(`edit-id-${localIndex}`).value;
+    const newPassPlain = document.getElementById(`edit-pass-${localIndex}`).value;
+    const newMemo = document.getElementById(`edit-memo-${localIndex}`).value;
+
+    if(!newService || !newPassPlain) return alert("サービス名とパスワードは必須です");
+
+    // 保存時は必ず暗号化する
+    const encrypted = CryptoJS.AES.encrypt(newPassPlain, masterKey).toString();
+
+    // UIを保存中表示に
+    const btn = event.target;
+    const originalText = btn.innerText;
+    btn.innerText = "保存中...";
+    btn.disabled = true;
+
+    try {
+        const response = await fetch("/api/save", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                action: "editPassword",
+                row: originalRowIndex,
+                service: newService,
+                loginId: newId,
+                encryptedPass: encrypted,
+                memo: newMemo
+            })
+        });
+        
+        const result = await response.json();
+        if (result.status === "success") {
+            alert("更新しました！");
+            loadPasswords(); // 一覧を再読み込みして反映
+        } else {
+            alert("エラー: " + result.message);
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
+    } catch (e) {
+        alert("通信エラー");
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
 }
 
 // 暗号化更新処理 (前回のまま)
