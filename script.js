@@ -182,7 +182,7 @@ async function saveMemo() {
             body: JSON.stringify({
                 action: "addMemo",
                 content: content,
-                date: new Date().toLocaleDateString()
+                date: new Date().toLocaleDateString() // 表示用日付
             })
         });
         document.getElementById('memo-input').value = "";
@@ -195,6 +195,7 @@ async function saveMemo() {
     }
 }
 
+// メモ一覧取得（削除ボタン付きに更新）
 async function loadMemos() {
     try {
         const response = await fetch("/api/save", {
@@ -208,17 +209,52 @@ async function loadMemos() {
 
         if(result.data && result.data.length > 0) {
             result.data.forEach(row => {
+                // row[0] はタイムスタンプ。削除時のIDとして使う
+                const timestamp = row[0]; 
+                
                 listDiv.innerHTML += `
-                    <div class="glass-card" style="margin-bottom:10px; padding:15px;">
-                        <div style="font-size:0.6rem; opacity:0.6; margin-bottom:5px;">${row[2]}</div>
-                        <div style="font-size:0.9rem; line-height:1.4;">${row[1].replace(/\n/g, '<br>')}</div>
+                    <div class="glass-card" style="margin-bottom:10px; padding:15px; position: relative;">
+                        <div style="font-size:0.6rem; opacity:0.6; margin-bottom:5px; display:flex; justify-content:space-between;">
+                            <span>${row[2]}</span>
+                            <button onclick="deleteMemo('${timestamp}')" class="delete-btn">
+                                <i data-lucide="trash-2" style="width:14px; height:14px;"></i>
+                            </button>
+                        </div>
+                        <div style="font-size:0.9rem; line-height:1.4; padding-right:20px;">
+                            ${row[1].replace(/\n/g, '<br>')}
+                        </div>
                     </div>
                 `;
             });
+            lucide.createIcons(); // 削除アイコンを描画
         } else {
             listDiv.innerHTML = `<p style="text-align:center; opacity:0.5; font-size:0.8rem;">メモはありません</p>`;
         }
     } catch (e) { console.error(e); }
+}
+
+// 削除機能 (New!)
+async function deleteMemo(timestamp) {
+    if (!confirm("このメモを削除しますか？")) return;
+
+    try {
+        // UI上で仮削除（反応を良く見せるため）
+        const tempBtn = event.target.closest('button');
+        if(tempBtn) tempBtn.innerText = "...";
+
+        await fetch("/api/save", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                action: "deleteMemo",
+                timestamp: timestamp
+            })
+        });
+        
+        loadMemos(); // 一覧再読み込み
+    } catch (e) {
+        alert("削除に失敗しました: " + e.message);
+    }
 }
 
 /* =========================================
