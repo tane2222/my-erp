@@ -140,3 +140,55 @@ button:active { background: rgba(255, 255, 255, 0.5); }
     color: #ff6b6b; /* ホバー時に赤くする */
     background: transparent;
 }
+
+/* style.css の末尾に追加 */
+
+/* パスワードリストのアコーディオン */
+.pass-item {
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    padding: 15px 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.pass-item:active {
+    background: rgba(255,255,255,0.1);
+}
+
+.pass-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pass-detail {
+    display: none; /* 初期状態は非表示 */
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed rgba(255,255,255,0.2);
+    font-size: 0.9rem;
+    animation: slideDown 0.3s ease-out;
+}
+
+.pass-detail.open {
+    display: block; /* クラスがつくと表示 */
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.pass-label {
+    font-size: 0.65rem;
+    opacity: 0.6;
+    display: block;
+    margin-bottom: 2px;
+    letter-spacing: 1px;
+}
+
+.pass-value {
+    display: block;
+    margin-bottom: 12px;
+    word-break: break-all; /* 長い文字も折り返す */
+}
